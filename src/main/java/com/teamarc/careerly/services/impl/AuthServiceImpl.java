@@ -4,7 +4,6 @@ package com.teamarc.careerly.services.impl;
 import com.teamarc.careerly.dto.SignupDto;
 import com.teamarc.careerly.dto.UserDto;
 import com.teamarc.careerly.entities.User;
-import com.teamarc.careerly.entities.enums.Roles;
 import com.teamarc.careerly.exceptions.RuntimeConflictException;
 import com.teamarc.careerly.repository.UserRepository;
 import com.teamarc.careerly.security.JWTService;
@@ -19,8 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -34,8 +31,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String[] login(String email, String password) {
-        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
-        User user= (User) authentication.getPrincipal();
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        User user = (User) authentication.getPrincipal();
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         return new String[]{accessToken, refreshToken};
@@ -44,18 +41,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public UserDto signup(SignupDto signupDto) {
-        User user=userRepository.findByEmail(signupDto.getEmail())
+        User user = userRepository.findByEmail(signupDto.getEmail())
                 .orElse(null);
-        if(user != null)
-            throw new RuntimeConflictException("The user already exist with email id: "+signupDto.getEmail());
+        if (user != null)
+            throw new RuntimeConflictException("The user already exist with email id: " + signupDto.getEmail());
 
-        User mappedUser=modelMapper.map(signupDto,User.class);
-        mappedUser.setRoles(Set.of(Roles.EMPLOYEE));
+        User mappedUser = modelMapper.map(signupDto, User.class);
         mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
         User savedUser = userRepository.save(mappedUser);
 
         return modelMapper.map(savedUser, UserDto.class);
-}
+    }
 
     @Override
     public String refreshToken(String refreshToken) {

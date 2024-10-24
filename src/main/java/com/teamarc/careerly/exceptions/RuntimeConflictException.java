@@ -1,6 +1,6 @@
 package com.teamarc.careerly.exceptions;
 
-public class RuntimeConflictException extends RuntimeException{
+public class RuntimeConflictException extends RuntimeException {
 
     public RuntimeConflictException() {
     }
