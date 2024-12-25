@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +26,8 @@ public class Wallet {
     private User user;
 
     @DecimalMin("0.0")
-    private Double balance = 0.0;
+    private BigDecimal balance = 0.0;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private Set<WalletTransaction> transactions = new HashSet<>();
+    private Set<Payment> transactions = new HashSet<>();
 }
