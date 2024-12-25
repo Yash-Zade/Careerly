@@ -1,7 +1,6 @@
 package com.teamarc.careerlybackend.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -25,8 +24,7 @@ public class Wallet {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @DecimalMin("0.0")
-    private BigDecimal balance = 0.0;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private Set<Payment> transactions = new HashSet<>();
