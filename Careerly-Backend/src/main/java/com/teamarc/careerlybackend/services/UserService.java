@@ -1,9 +1,10 @@
 package com.teamarc.careerlybackend.services;
 
 
-import com.teamarc.careerly.entities.User;
-import com.teamarc.careerly.exceptions.ResourceNotFoundException;
-import com.teamarc.careerly.repository.UserRepository;
+
+import com.teamarc.careerlybackend.entity.User;
+import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
+import com.teamarc.careerlybackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

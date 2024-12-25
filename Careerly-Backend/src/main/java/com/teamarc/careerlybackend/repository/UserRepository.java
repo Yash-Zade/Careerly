@@ -1,10 +1,14 @@
 package com.teamarc.careerlybackend.repository;
 
-import com.teamarc.careerly.entities.User;
+import com.teamarc.careerlybackend.entity.User;
+import com.teamarc.careerlybackend.entity.enums.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String username);
+
+    Optional<User> findByRoles(Roles roles);
 }

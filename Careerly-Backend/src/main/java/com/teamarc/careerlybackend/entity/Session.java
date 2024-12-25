@@ -14,7 +14,7 @@ public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String sessionId;
+    private Long sessionId;
 
     private String sessionStartTime;
     private String sessionEndTime;

@@ -16,7 +16,7 @@ public class Call {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String callId;
+    private Long callId;
 
     @ManyToOne
     @JoinColumn(name = "caller_id")

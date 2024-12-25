@@ -1,9 +1,11 @@
 package com.teamarc.careerlybackend.entity;
 
 import com.teamarc.careerlybackend.entity.enums.PaymentStatus;
+import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -17,14 +19,17 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String paymentId;
+    private Long paymentId;
 
-    private Float amount;
+    private BigDecimal amount;
     private Date paymentDate;
-    private Float adminCut;
+    private BigDecimal adminCut;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
     @ManyToOne
     @JoinColumn(name = "admin_id")
@@ -34,6 +39,9 @@ public class Payment {
     @JoinColumn(name = "session_id")
     private Session session;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
+
 }
 

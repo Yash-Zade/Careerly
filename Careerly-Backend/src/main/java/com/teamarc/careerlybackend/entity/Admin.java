@@ -17,6 +17,5 @@ public class Admin extends User {
     @OneToMany(mappedBy = "admin")
     private List<Payment> payment;
 
-    // Getters and Setters
 }
 

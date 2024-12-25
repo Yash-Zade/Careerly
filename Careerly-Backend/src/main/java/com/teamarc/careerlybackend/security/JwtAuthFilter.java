@@ -1,8 +1,8 @@
 package com.teamarc.careerlybackend.security;
 
 
-import com.teamarc.careerly.entities.User;
-import com.teamarc.careerly.services.UserService;
+import com.teamarc.careerlybackend.entity.User;
+import com.teamarc.careerlybackend.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

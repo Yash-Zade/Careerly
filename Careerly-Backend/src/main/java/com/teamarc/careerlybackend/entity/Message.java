@@ -14,7 +14,7 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String messageId;
+    private Long messageId;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")

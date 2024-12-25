@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class SessionDTO {
 
-    private String sessionId;
+    private Long sessionId;
 
     @NotEmpty(message = "Session start time cannot be empty")
     private String sessionStartTime;

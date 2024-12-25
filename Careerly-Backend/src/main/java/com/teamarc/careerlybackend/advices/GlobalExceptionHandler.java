@@ -1,7 +1,8 @@
 package com.teamarc.careerlybackend.advices;
 
-import com.teamarc.careerly.exceptions.ResourceNotFoundException;
-import com.teamarc.careerly.exceptions.RuntimeConflictException;
+
+import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
+import com.teamarc.careerlybackend.exceptions.RuntimeConflictException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

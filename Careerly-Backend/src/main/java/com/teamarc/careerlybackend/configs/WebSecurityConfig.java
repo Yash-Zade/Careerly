@@ -1,6 +1,6 @@
 package com.teamarc.careerlybackend.configs;
 
-import com.teamarc.careerly.security.JwtAuthFilter;
+import com.teamarc.careerlybackend.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

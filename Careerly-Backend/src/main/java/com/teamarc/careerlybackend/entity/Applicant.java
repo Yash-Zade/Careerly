@@ -18,9 +18,6 @@ public class Applicant extends User {
 
     private String resume;
 
-    @OneToOne(mappedBy = "applicant", cascade = CascadeType.ALL)
-    private Wallet wallet;
-
     @ManyToMany(mappedBy = "applications")
     private List<Job> appliedJobs;
 

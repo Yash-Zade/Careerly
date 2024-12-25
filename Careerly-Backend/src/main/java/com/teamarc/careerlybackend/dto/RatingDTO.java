@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class RatingDTO {
 
-    private String ratingId;
+    private Long ratingId;
 
     @NotNull(message = "Rating value cannot be null")
     private RatingValue ratingValue;

@@ -1,16 +1,14 @@
 package com.teamarc.careerlybackend.services.impl;
 
-
-import com.teamarc.careerly.dto.SignupDto;
-import com.teamarc.careerly.dto.UserDto;
-import com.teamarc.careerly.entities.User;
-import com.teamarc.careerly.entities.enums.Roles;
-import com.teamarc.careerly.exceptions.RuntimeConflictException;
-import com.teamarc.careerly.repository.UserRepository;
-import com.teamarc.careerly.security.JWTService;
-import com.teamarc.careerly.services.AuthService;
-import com.teamarc.careerly.services.UserService;
-import com.teamarc.careerly.services.WalletService;
+import com.teamarc.careerlybackend.dto.SignupDTO;
+import com.teamarc.careerlybackend.dto.UserDTO;
+import com.teamarc.careerlybackend.entity.User;
+import com.teamarc.careerlybackend.exceptions.RuntimeConflictException;
+import com.teamarc.careerlybackend.repository.UserRepository;
+import com.teamarc.careerlybackend.security.JWTService;
+import com.teamarc.careerlybackend.services.AuthService;
+import com.teamarc.careerlybackend.services.UserService;
+import com.teamarc.careerlybackend.services.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,10 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+
 import java.util.Set;
 
-import static com.teamarc.careerly.entities.enums.Roles.EMPLOYEE;
+import static com.teamarc.careerlybackend.entity.enums.Roles.APPLICANT;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public UserDto signup(SignupDto signupDto) {
+    public UserDTO signup(SignupDTO signupDto) {
         User user = userRepository.findByEmail(signupDto.getEmail())
                 .orElse(null);
         if (user != null)
@@ -56,11 +54,11 @@ public class AuthServiceImpl implements AuthService {
 
         User mappedUser = modelMapper.map(signupDto, User.class);
         mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
-        mappedUser.setRoles(Set.of(EMPLOYEE));
+        mappedUser.setRoles(Set.of(APPLICANT));
         User savedUser = userRepository.save(mappedUser);
         walletService.cerateNewWallet(savedUser);
 
-        return modelMapper.map(savedUser, UserDto.class);
+        return modelMapper.map(savedUser, UserDTO.class);
     }
 
     @Override
