@@ -21,5 +21,5 @@ public class JobDTO {
 
     private List<String> skillsRequired;
 
-    private JobStatus status;  // Use Enum for job status
+    private JobStatus status;
 }

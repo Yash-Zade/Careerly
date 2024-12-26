@@ -1,5 +1,6 @@
 package com.teamarc.careerlybackend.entity;
 
+import com.teamarc.careerlybackend.entity.enums.JobStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,6 @@ public class Job {
     )
     private List<Applicant> applications;
 
-    private String status;
+    private JobStatus status;
 
 }
