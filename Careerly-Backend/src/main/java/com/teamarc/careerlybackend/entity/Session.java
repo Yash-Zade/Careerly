@@ -1,7 +1,10 @@
 package com.teamarc.careerlybackend.entity;
 
+import com.teamarc.careerlybackend.entity.enums.SessionType;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @NoArgsConstructor
@@ -20,7 +23,7 @@ public class Session {
     private String sessionEndTime;
     private Boolean isPaid;
     private Boolean isFirstSession;
-    private Float sessionFee;
+    private BigDecimal sessionFee;
 
     @ManyToOne
     @JoinColumn(name = "mentor_id")
@@ -30,11 +33,15 @@ public class Session {
     @JoinColumn(name = "applicant_id")
     private Applicant applicant;
 
+    private SessionType sessionType;
+
     @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
     private Rating rating;
 
     @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
     private Payment payment;
 
-    // Getters and Setters
+    @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
+    private WalletTransaction walletTransaction;
+
 }

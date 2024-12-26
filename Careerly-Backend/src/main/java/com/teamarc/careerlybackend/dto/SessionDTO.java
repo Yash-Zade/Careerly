@@ -1,7 +1,11 @@
 package com.teamarc.careerlybackend.dto;
 
-import jakarta.validation.constraints.*;
+import com.teamarc.careerlybackend.entity.enums.SessionType;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Data
 public class SessionDTO {
@@ -14,13 +18,16 @@ public class SessionDTO {
     @NotEmpty(message = "Session end time cannot be empty")
     private String sessionEndTime;
 
-    private Boolean isPaid;
-    private Boolean isFirstSession;
+    private SessionType sessionType;
 
     @Positive(message = "Session fee must be a positive value")
-    private Float sessionFee;
+    private BigDecimal sessionFee;
 
     private RatingDTO rating;
 
-    private PaymentDTO payment;
+    private MentorDTO mentor;
+
+    private ApplicantDTO applicant;
+
 }
+

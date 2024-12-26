@@ -1,15 +1,19 @@
 package com.teamarc.careerlybackend.dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class MentorDTO extends UserDTO {
+public class MentorDTO {
+
+    private Long mentorId;
 
     private List<String> expertise;
 
+    private UserDTO user;
+
     private List<SessionDTO> sessions;
+
+    private List<RatingDTO> ratings;
 }

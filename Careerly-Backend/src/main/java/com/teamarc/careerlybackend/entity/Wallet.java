@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "wallets")
@@ -18,7 +17,7 @@ import java.util.Set;
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long walletId;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id")
@@ -27,5 +26,5 @@ public class Wallet {
     private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
-    private Set<Payment> transactions = new HashSet<>();
+    private List<WalletTransaction> transactions;
 }

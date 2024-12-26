@@ -1,5 +1,7 @@
 package com.teamarc.careerlybackend.entity;
 
+import com.teamarc.careerlybackend.entity.enums.CallStatus;
+import com.teamarc.careerlybackend.entity.enums.CallType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,13 +28,13 @@ public class Call {
     @JoinColumn(name = "receiver_id")
     private User receiver;
 
-    private String callType;  // "Audio" or "Video"
+    private CallType callType;
     private Date callStartTime;
     private Date callEndTime;
     private String googleMeetLink;  // For video calls
 
+    private CallStatus status;
 
 
-    // Getters and Setters
 }
 

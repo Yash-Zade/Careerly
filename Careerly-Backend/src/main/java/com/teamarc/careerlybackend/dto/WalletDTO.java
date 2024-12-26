@@ -1,14 +1,15 @@
 package com.teamarc.careerlybackend.dto;
 
-import com.teamarc.careerlybackend.entity.Payment;
+import com.teamarc.careerlybackend.entity.WalletTransaction;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 public class WalletDTO {
-    private long id;
+    private Long id;
     private UserDTO user;
-    private double balance;
-    private List<Payment> payments;
+    private BigDecimal balance;
+    private List<WalletTransaction> transactions;
 }

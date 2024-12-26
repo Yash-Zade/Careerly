@@ -3,12 +3,13 @@ package com.teamarc.careerlybackend.dto;
 import com.teamarc.careerlybackend.entity.enums.CallStatus;
 import com.teamarc.careerlybackend.entity.enums.CallType;
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
 public class CallDTO {
 
-    private String callId;
+    private Long callId;
 
     private UserDTO caller;
 

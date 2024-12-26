@@ -7,7 +7,6 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
 @Getter
 @Setter
@@ -17,13 +16,16 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ratingId;
 
-    private Integer ratingValue;  // 1-5
+    private Double ratingValue;
+
     private String comment;
 
     @OneToOne
     @JoinColumn(name = "session_id")
     private Session session;
 
-    // Getters and Setters
+    @ManyToOne
+    @JoinColumn(name = "mentor_id")
+    private Mentor mentor;
 }
 

@@ -1,7 +1,6 @@
 package com.teamarc.careerlybackend.services;
 
 
-
 import com.teamarc.careerlybackend.entity.User;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.UserRepository;

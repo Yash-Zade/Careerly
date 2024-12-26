@@ -27,6 +27,5 @@ public class Message {
     private String messageContent;
     private String timestamp;
 
-    // Getters and Setters
 }
 

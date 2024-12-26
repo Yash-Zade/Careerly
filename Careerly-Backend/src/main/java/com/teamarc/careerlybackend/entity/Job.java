@@ -37,7 +37,6 @@ public class Job {
     )
     private List<Applicant> applications;
 
-    private String status;  // "Open" or "Closed"
+    private String status;
 
-    // Getters and Setters
 }

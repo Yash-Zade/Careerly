@@ -5,20 +5,22 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
 @Getter
 @Setter
-public class Employer extends User {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Employer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long employerId;
 
     private String companyName;
     private String companyWebsite;
 
     @OneToOne
-    @JoinColumn(name = "employer_id")
-    private Employer employer;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    // Getters and Setters
 }

@@ -1,14 +1,15 @@
 package com.teamarc.careerlybackend.dto;
 
 import com.teamarc.careerlybackend.entity.enums.JobStatus;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+
 import java.util.List;
 
 @Data
 public class JobDTO {
 
-    private String jobId;
+    private Long jobId;
 
     @NotEmpty(message = "Job title cannot be empty")
     private String title;

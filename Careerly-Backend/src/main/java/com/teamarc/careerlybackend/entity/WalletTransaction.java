@@ -1,36 +1,38 @@
 package com.teamarc.careerlybackend.entity;
 
-import com.teamarc.careerlybackend.entity.enums.PaymentStatus;
+import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Payment {
-
+@Entity
+@Builder
+public class WalletTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paymentId;
+    private Long id;
 
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
+    private TransactionType transactionType;
 
-    @CreationTimestamp
-    private LocalDateTime paymentTime;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "session_id")
     private Session session;
 
-}
+    private String transactionId;
 
+    @ManyToOne
+    private Wallet wallet;
+
+    @CurrentTimestamp
+    private LocalDateTime timeStamp;
+}

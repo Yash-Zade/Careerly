@@ -25,7 +25,7 @@ public class JWTService {
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
-                .subject(Long.toString(user.getId()))
+                .subject(Long.toString(user.getUserId()))
                 .claim("email", user.getEmail())
                 .claim("roles", user.getRoles().toString())
                 .issuedAt(new Date())
@@ -36,7 +36,7 @@ public class JWTService {
 
     public String generateRefreshToken(User user) {
         return Jwts.builder()
-                .subject(Long.toString(user.getId()))
+                .subject(Long.toString(user.getUserId()))
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30 * 6))
                 .signWith(getSecretKey())

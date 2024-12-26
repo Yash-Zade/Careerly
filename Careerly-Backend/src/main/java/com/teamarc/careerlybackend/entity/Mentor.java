@@ -6,13 +6,16 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
 @Getter
 @Setter
-public class Mentor extends User {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Mentor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mentorId;
 
     @ElementCollection
     private List<String> expertise;
@@ -20,6 +23,12 @@ public class Mentor extends User {
     @OneToMany(mappedBy = "mentor")
     private List<Session> sessions;
 
-    // Getters and Setters
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "mentor")
+    private List<Rating> ratings;
+
 }
 

@@ -1,11 +1,12 @@
 package com.teamarc.careerlybackend.dto;
 
+import com.teamarc.careerlybackend.entity.enums.Roles;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.management.relation.Role;
+import java.util.Set;
 
 @Data
 public class UserDTO {
@@ -20,9 +21,6 @@ public class UserDTO {
     private String email;
 
     @NotNull(message = "Role cannot be null")
-    private Role role;
+    private Set<Roles> roles;
 
-    private String profilePicture;
-
-    private Boolean isActive;
 }
