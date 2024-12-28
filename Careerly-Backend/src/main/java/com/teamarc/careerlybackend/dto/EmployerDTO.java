@@ -9,5 +9,5 @@ public class EmployerDTO {
     private Long employerId;
     private String companyName;
     private String companyWebsite;
-    private User user;
+    private UserDTO user;
 }
