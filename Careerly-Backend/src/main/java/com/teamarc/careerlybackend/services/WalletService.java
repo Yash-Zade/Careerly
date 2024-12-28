@@ -8,7 +8,6 @@ import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +18,8 @@ import java.math.BigDecimal;
 public class WalletService {
 
     private final WalletRepository walletRepository;
-    private final ModelMapper modelMapper;
     private final WalletTransactionService walletTransactionService;
+
 
     @Transactional
     public Wallet addMoneyToWallet(User user, BigDecimal amount, String transactionId, Session session) {
@@ -61,17 +60,20 @@ public class WalletService {
 
     public Wallet findWalletById(Long walletId) {
         return walletRepository.findById(walletId)
-                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + walletId));
+                .orElseThrow(()-> new ResourceNotFoundException("Wallet not found with id: "+walletId));
     }
 
-    public Wallet cerateNewWallet(User user) {
-        Wallet wallet = new Wallet();
-        wallet.setUser(user);
+    public Wallet createNewWallet(User user) {
+        Wallet wallet=Wallet.builder()
+                .balance(BigDecimal.ZERO)
+                .user(user)
+                .transactions(null)
+                .build();
         return walletRepository.save(wallet);
     }
 
     public Wallet findByUser(User user) {
         return walletRepository.findByUser(user)
-                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + user.getUserId()));
+                .orElseThrow(()-> new ResourceNotFoundException("Wallet not found with id: "+user.getId()));
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class WalletTransactionService {
 
-    private final ModelMapper modelMapper;
     private final WalletTransactionsRepository walletTransactionsRepository;
 
     public void createNewWalletTransaction(WalletTransaction walletTransaction) {

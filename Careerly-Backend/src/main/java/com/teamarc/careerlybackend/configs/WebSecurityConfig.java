@@ -20,7 +20,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
-    private static final String[] PUBLIC_ROUTES = {"/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
+    private static final String[] PUBLIC_ROUTES = {"/auth/**","/actuator/health","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthFilter jwtAuthFilter) throws Exception {
@@ -30,7 +30,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(withDefaults()); // Enable CORS with default settings
+                .cors(withDefaults());
 
         return httpSecurity.build();
     }
@@ -39,9 +39,10 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("http://localhost:5173"); // Allow specific origin
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

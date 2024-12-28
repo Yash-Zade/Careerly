@@ -1,5 +1,6 @@
 package com.teamarc.careerlybackend.dto;
 
+import com.teamarc.careerlybackend.entity.Session;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -12,4 +13,6 @@ public class RatingDTO {
     private Double ratingValue;
 
     private String comment;
+
+    private Session session;
 }

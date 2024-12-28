@@ -20,12 +20,12 @@ public class Applicant {
 
     private String resume;
 
-    @ManyToMany(mappedBy = "applications")
-    private List<Job> appliedJobs;
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "applicant",fetch = FetchType.LAZY)
+    private List<JobApplication> jobApplications;
 
 }
 

@@ -1,5 +1,6 @@
 package com.teamarc.careerlybackend.dto;
 
+import com.teamarc.careerlybackend.entity.JobApplication;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,5 @@ public class ApplicantDTO {
 
     private UserDTO user;
 
-    private List<JobDTO> appliedJobs;
+    private List<JobApplication> jobApplications;
 }

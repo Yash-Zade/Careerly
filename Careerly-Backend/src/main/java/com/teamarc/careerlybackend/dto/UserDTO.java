@@ -1,6 +1,6 @@
 package com.teamarc.careerlybackend.dto;
 
-import com.teamarc.careerlybackend.entity.enums.Roles;
+import com.teamarc.careerlybackend.entity.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 public class UserDTO {
 
-    private Long userId;
+    private Long id;
 
     @NotEmpty(message = "Name cannot be empty")
     private String name;
@@ -21,6 +21,6 @@ public class UserDTO {
     private String email;
 
     @NotNull(message = "Role cannot be null")
-    private Set<Roles> roles;
+    private Set<Role> roles;
 
 }

@@ -8,8 +8,10 @@ import org.hibernate.annotations.CurrentTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -25,12 +27,11 @@ public class WalletTransaction {
     private TransactionType transactionType;
 
     @OneToOne
-    @JoinColumn(name = "session_id")
     private Session session;
 
     private String transactionId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Wallet wallet;
 
     @CurrentTimestamp

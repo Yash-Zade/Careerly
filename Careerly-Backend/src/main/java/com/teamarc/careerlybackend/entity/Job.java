@@ -30,14 +30,9 @@ public class Job {
     @JoinColumn(name = "employer_id")
     private Employer postedBy;
 
-    @ManyToMany
-    @JoinTable(
-            name = "job_applications",
-            joinColumns = @JoinColumn(name = "job_id"),
-            inverseJoinColumns = @JoinColumn(name = "applicant_id")
-    )
-    private List<Applicant> applications;
+    @OneToMany(mappedBy = "job")
+    private List<JobApplication> jobApplications;
 
-    private JobStatus status;
+    private JobStatus jobStatus;
 
 }

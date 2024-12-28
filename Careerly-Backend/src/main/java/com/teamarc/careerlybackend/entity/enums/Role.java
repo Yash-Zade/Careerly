@@ -1,5 +1,5 @@
 package com.teamarc.careerlybackend.entity.enums;
 
-public enum Roles {
+public enum Role {
     APPLICANT, MENTOR, EMPLOYER, ADMIN
 }
