@@ -10,9 +10,15 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.ReflectionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.lang.reflect.Field;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +84,45 @@ public class ApplicantService {
                 .resume(null)
                 .build();
         return applicantRepository.save(applicant);
+    }
+
+    public ApplicantDTO updateProfile(Long applicantId, Map<String, Object> updates) {
+        checkApplicantExistsById(applicantId);
+        Applicant applicant = applicantRepository.findById(applicantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId));
+        updates.forEach((field, value) -> {
+            Field fieldToBeUpdated = ReflectionUtils.findRequiredField(Applicant.class, field);
+            fieldToBeUpdated.setAccessible(true);
+            ReflectionUtils.setField(fieldToBeUpdated, applicant, value);
+        });
+        return modelMapper.map(applicantRepository.save(applicant), ApplicantDTO.class);
+    }
+
+
+    public void checkApplicantExistsById(Long applicantId) {
+        if (!applicantRepository.existsById(applicantId)) {
+            throw new ResourceNotFoundException("Applicant not found with id: " + applicantId);
+        }
+    }
+
+    public Page<JobApplicationDTO> searchApplications(String keyword, PageRequest pageRequest, Pageable pageable) {
+        Page<JobApplication> jobApplications = jobApplicationRepository.searchApplications(keyword, pageRequest, pageable);
+        return jobApplications.map(jobApplication -> modelMapper.map(jobApplication, JobApplicationDTO.class));
+    }
+
+    public Page<JobDTO> searchJob(String keyword, PageRequest pageRequest, Pageable pageable) {
+        Page<Job> jobs = jobService.searchJobs(keyword, pageRequest, pageable);
+        return jobs.map(job -> modelMapper.map(job, JobDTO.class));
+    }
+
+    public void uploadResume(MultipartFile file) {
+        Applicant applicant = getCurrentApplicant();
+        applicant.setResume(file.getOriginalFilename());
+        applicantRepository.save(applicant);
+    }
+
+    public String checkApplicationStatus(Long applicationId) {
+        JobApplication jobApplication = jobApplicationRepository.findById(applicationId).orElseThrow(()-> new ResourceNotFoundException("Job application not found"));
+        return jobApplication.getApplicationStatus().name();
     }
 }
