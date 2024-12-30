@@ -36,7 +36,7 @@ public class EmployerService {
         return employerRepository.save(employer);
     }
 
-    public EmployerDTO getEmployerById() {
+    public EmployerDTO getMyProfile() {
         Employer employer = getCurrentEmployer();
         return modelMapper.map(employer, EmployerDTO.class);
     }
@@ -176,5 +176,11 @@ public class EmployerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         job.setJobStatus(JobStatus.CLOSED);
         return modelMapper.map(jobRepository.save(job), JobDTO.class);
+    }
+
+    public EmployerDTO getEmployerProfile(Long id) {
+        Employer employer = employerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employer not found with id: " + id));
+        return modelMapper.map(employer, EmployerDTO.class);
     }
 }

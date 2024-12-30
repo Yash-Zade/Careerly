@@ -25,8 +25,13 @@ public class EmployerController {
     private final EmployerService employerService;
 
     @GetMapping("/profile")
-    public ResponseEntity<EmployerDTO> getEmployerProfile() {
-        return ResponseEntity.ok(employerService.getEmployerById());
+    public ResponseEntity<EmployerDTO> getMyProfile() {
+        return ResponseEntity.ok(employerService.getMyProfile());
+    }
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<EmployerDTO> getEmployerProfile(@PathVariable Long id) {
+        return ResponseEntity.ok(employerService.getEmployerProfile(id));
     }
 
     @PutMapping(path="/profile/{id}")
