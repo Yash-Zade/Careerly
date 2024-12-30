@@ -23,4 +23,8 @@ public class JobService {
     public Page<Job> searchJobs(String keyword, PageRequest pageRequest, Pageable pageable) {
         return jobRepository.searchJobs(keyword, pageRequest, pageable);
     }
+
+    public Page<Job> getAllJobs(PageRequest pageRequest) {
+        return jobRepository.findAll(pageRequest);
+    }
 }

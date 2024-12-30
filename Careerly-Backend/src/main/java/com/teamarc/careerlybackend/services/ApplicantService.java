@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -30,10 +31,17 @@ public class ApplicantService {
     private final JobService jobService;
 
     @Transactional
-    public JobApplicationDTO applyJob(JobApplicationDTO jobApplicationDTO) {
+    public JobApplicationDTO applyJob(Long jobId, JobApplicationDTO jobApplicationDTO) {
+
+        Job job = jobService.getJobById(jobId);
+        if(job.getJobStatus().toString().equals("CLOSED")){
+            throw new RuntimeException("Job is closed");
+        }
+
         if (jobApplicationDTO == null || jobApplicationDTO.getJobId() == null) {
             throw new IllegalArgumentException("Invalid job application data");
         }
+
         JobApplication jobApplication = modelMapper.map(jobApplicationDTO, JobApplication.class);
         jobApplication.setApplicationStatus(ApplicationStatus.APPLIED);
         jobApplication.setJob(jobService.getJobById(jobApplicationDTO.getJobId()));
@@ -66,9 +74,9 @@ public class ApplicantService {
 
     }
 
-    public Page<JobApplicationDTO> getAllApplications(PageRequest pageRequest) {
-        Page<JobApplication> jobApplications = jobApplicationRepository.findAll(pageRequest);
-        return jobApplications.map(job -> modelMapper.map(job, JobApplicationDTO.class));
+    public Page<JobApplicationDTO> getJobApplications(PageRequest pageRequest, Pageable pageable) {
+        Page<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(getCurrentApplicant(), pageRequest, pageable);
+        return jobApplications.map(jobApplication -> modelMapper.map(jobApplication, JobApplicationDTO.class));
     }
 
     public Applicant getCurrentApplicant() {
@@ -124,5 +132,15 @@ public class ApplicantService {
     public String checkApplicationStatus(Long applicationId) {
         JobApplication jobApplication = jobApplicationRepository.findById(applicationId).orElseThrow(()-> new ResourceNotFoundException("Job application not found"));
         return jobApplication.getApplicationStatus().name();
+    }
+
+    public Applicant getApplicantById(Long applicantId) {
+        return applicantRepository.findById(applicantId)
+                .orElseThrow(()-> new ResourceNotFoundException("Applicant not found with id: "+applicantId));
+    }
+
+    public Page<JobDTO> getJobs(PageRequest pageRequest) {
+        Page<Job> jobs = jobService.getAllJobs(pageRequest);
+        return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 }
