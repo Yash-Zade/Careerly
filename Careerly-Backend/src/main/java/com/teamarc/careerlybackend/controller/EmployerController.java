@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EmployerController {
 
-    private final EmployerService employerService;
-
-
 
 
 

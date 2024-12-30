@@ -17,7 +17,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication,L
         "OR LOWER(j.job.description) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
         "OR LOWER(j.job.postedBy.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
         "OR LOWER(j.job.location) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-        "OR LOWER(j.job.jobStatus) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+        "OR LOWER(CAST(j.applicationStatus AS string)) LIKE LOWER(CONCAT('%', :keyword, '%'))"+
         "OR LOWER(j.applicant.user.name) LIKE LOWER(CONCAT('%', :keyword, '%'))"
 )
 Page<JobApplication> searchApplications(@Param("keyword") String keyword, PageRequest pageRequest,

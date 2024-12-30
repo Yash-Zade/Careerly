@@ -17,7 +17,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "OR LOWER(j.postedBy.companyName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR EXISTS (SELECT skill FROM j.skillsRequired skill WHERE LOWER(skill) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
             "OR LOWER(j.location) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(j.jobStatus) LIKE LOWER(CONCAT('%', :keyword, '%'))"
+            "OR LOWER(CAST(j.jobStatus AS string)) LIKE LOWER(CONCAT('%', :keyword, '%'))"
     )
     Page<Job> searchJobs(String keyword, PageRequest pageRequest, Pageable pageable);
 }

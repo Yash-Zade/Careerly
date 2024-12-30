@@ -63,11 +63,11 @@ public class ApplicantController {
         return ResponseEntity.ok(applicantService.searchApplications(keyword, pageRequest,pageable));
     }
 
-@GetMapping(path="/checkApplicationStatus/{applicationId}")
-public ResponseEntity<String> checkApplicationStatus(@PathVariable Long applicationId){
-    String status = applicantService.checkApplicationStatus(applicationId);
-    return ResponseEntity.ok(status);
-}
+    @GetMapping(path="/checkApplicationStatus/{applicationId}")
+    public ResponseEntity<String> checkApplicationStatus(@PathVariable Long applicationId){
+        String status = applicantService.checkApplicationStatus(applicationId);
+        return ResponseEntity.ok(status);
+    }
     @GetMapping(path="/searchJob")
     public ResponseEntity<Page<JobDTO>> searchJob(@RequestParam String keyword,
                                                   @RequestParam(defaultValue = "0") Integer pageOffset,
