@@ -34,6 +34,7 @@ public class Job {
     @OneToMany(mappedBy = "job")
     private List<JobApplication> jobApplications;
 
+    @Enumerated(EnumType.STRING)
     private JobStatus jobStatus;
 
     private String company;

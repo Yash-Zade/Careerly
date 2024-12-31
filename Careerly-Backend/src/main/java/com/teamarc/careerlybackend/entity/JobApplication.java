@@ -29,6 +29,7 @@ public class JobApplication {
     private Applicant applicant;
 
     @Column(name = "application_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ApplicationStatus applicationStatus;
 
     @Column(name = "applied_date", nullable = false)
