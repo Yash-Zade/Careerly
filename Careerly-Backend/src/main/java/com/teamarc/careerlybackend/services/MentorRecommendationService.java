@@ -8,6 +8,9 @@ import com.teamarc.careerlybackend.entity.Mentor;
 import com.teamarc.careerlybackend.repository.MentorRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,15 +28,16 @@ public class MentorRecommendationService {
     private static final double RELEVANCE_WEIGHT = 0.2;
     private static final double THRESHOLD = 0.7;
 
-    public List<MentorDTO> recommendMentors(RecommendationRequestDTO recommendationRequest) {
+    public Page<MentorDTO> recommendMentors(RecommendationRequestDTO recommendationRequest, PageRequest pageRequest) {
         List<Mentor> allMentors = mentorRepository.findAll();
-        return allMentors.stream()
+        List<MentorDTO> recommendedMentor = allMentors.stream()
                 .map(mentor -> {
                     double score = calculateFinalScore(recommendationRequest.getApplicant(), recommendationRequest.getJob(), mentor);
                     return score >= THRESHOLD ? modelMapper.map(mentor, MentorDTO.class) : null;
                 })
                 .filter(mentorDTO -> mentorDTO != null)
                 .collect(Collectors.toList());
+        return new PageImpl<>(recommendedMentor, pageRequest, recommendedMentor.size());
     }
 
     private double calculateFinalScore(Applicant applicant, Job job, Mentor mentor) {

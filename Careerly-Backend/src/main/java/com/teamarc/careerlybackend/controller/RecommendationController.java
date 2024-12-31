@@ -26,8 +26,9 @@ public class RecommendationController {
     private final JobRecommendationService jobRecommendationService;
 
     @PostMapping("/mentors")
-    public ResponseEntity<List<MentorDTO>> recommendMentors(@RequestBody RecommendationRequestDTO recommendationRequest) {
-        return ResponseEntity.ok(mentorRecommendationService.recommendMentors(recommendationRequest));
+    public ResponseEntity<Page<MentorDTO>> recommendMentors(@RequestBody RecommendationRequestDTO recommendationRequest,@RequestParam(defaultValue = "0") Integer pageOffset,
+                                                            @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
+        return ResponseEntity.ok(mentorRecommendationService.recommendMentors(recommendationRequest, PageRequest.of(pageOffset, pageSize)));
     }
 
     @PostMapping("/jobs")
