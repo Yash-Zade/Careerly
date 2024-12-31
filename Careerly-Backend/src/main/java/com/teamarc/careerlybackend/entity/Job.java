@@ -36,6 +36,8 @@ public class Job {
 
     private JobStatus jobStatus;
 
+    private String company;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

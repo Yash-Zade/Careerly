@@ -43,4 +43,22 @@ public class WalletPaymentStrategy {
         payment.setPaymentStatus(PaymentStatus.COMPLETED);
         paymentRepository.save(payment);
     }
+
+    @Transactional
+    public void refundPayment(Payment payment) {
+        Mentor mentor = payment.getSession().getMentor();
+        Applicant applicant = payment.getSession().getApplicant();
+        Wallet mentorWallet = walletService.findWalletById(mentor.getMentorId());
+
+        if (mentorWallet.getBalance().compareTo(payment.getAmount()) < 0) {
+            payment.setPaymentStatus(PaymentStatus.FAILED);
+            paymentRepository.save(payment);
+            throw new RuntimeException("Insufficient balance in mentor's wallet: refund failed");
+        }
+
+        walletService.addMoneyToWallet(applicant.getUser(), payment.getAmount(), null, payment.getSession());
+        walletService.deductMoneyToWallet(mentor.getUser(), payment.getAmount(), null, payment.getSession());
+        payment.setPaymentStatus(PaymentStatus.REFUNDED);
+        paymentRepository.save(payment);
+    }
 }

@@ -20,12 +20,21 @@ public class Applicant {
 
     private String resume;
 
+    @ElementCollection
+    private List<String> skills;
+
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "applicant",fetch = FetchType.LAZY)
     private List<JobApplication> jobApplications;
+
+    private Boolean isFirstSession;
+
+    @ElementCollection
+    private List<String> preferredLocations;
 
 }
 

@@ -3,6 +3,7 @@ package com.teamarc.careerlybackend.services;
 import com.teamarc.careerlybackend.dto.*;
 import com.teamarc.careerlybackend.entity.*;
 import com.teamarc.careerlybackend.entity.enums.ApplicationStatus;
+import com.teamarc.careerlybackend.entity.enums.SessionStatus;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.ApplicantRepository;
 import com.teamarc.careerlybackend.repository.JobApplicationRepository;
@@ -29,6 +30,9 @@ public class ApplicantService {
     private final JobApplicationRepository jobApplicationRepository;
     private final ModelMapper modelMapper;
     private final JobService jobService;
+    private final SessionService sessionService;
+    private final RatingService ratingService;
+    private final SessionManagementService sessionManagementService;
 
     @Transactional
     public JobApplicationDTO applyJob(Long jobId, JobApplicationDTO jobApplicationDTO) {
@@ -58,15 +62,6 @@ public class ApplicantService {
         jobApplicationRepository.delete(jobApplication);
         return jobApplicationDTO;
     }
-
-//    @Transactional
-//    public RatingDTO rateSession(Long sessionId, RatingDTO rating) {
-//        Session session = sessionRepository.findById(sessionId)
-//                .orElseThrow(() -> new RuntimeException("Session not found"));
-//        session.setRating(modelMapper.map(rating, Rating.class));
-//        Session savedSession = sessionRepository.save(session);
-//        return modelMapper.map(savedSession, RatingDTO.class);
-//    }
 
     public ApplicantDTO getMyProfile() {
         Applicant applicant = getCurrentApplicant();
@@ -134,13 +129,40 @@ public class ApplicantService {
         return jobApplication.getApplicationStatus().name();
     }
 
-    public Applicant getApplicantById(Long applicantId) {
-        return applicantRepository.findById(applicantId)
-                .orElseThrow(()-> new ResourceNotFoundException("Applicant not found with id: "+applicantId));
+    public ApplicantDTO getApplicantById(Long applicantId) {
+        return modelMapper.map(applicantRepository.findById(applicantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId)), ApplicantDTO.class);
     }
 
     public Page<JobDTO> getJobs(PageRequest pageRequest) {
         Page<Job> jobs = jobService.getAllJobs(pageRequest);
         return jobs.map(job -> modelMapper.map(job, JobDTO.class));
+    }
+
+    public SessionDTO requestSession(Long sessionId) {
+        ApplicantDTO applicant = getMyProfile();
+        return sessionManagementService.requestSession(sessionId,applicant);
+    }
+
+
+    public MentorDTO rateMentor(RatingDTO ratingDTO,Long sessionId) {
+        Session session= modelMapper.map(sessionService.getSessionById(sessionId), Session.class);
+        Applicant applicant=getCurrentApplicant();
+        if(!applicant.equals(session.getApplicant())){
+            throw new RuntimeException("Applicant is not the owner of session");
+        }
+        if(!session.getSessionStatus().equals(SessionStatus.COMPLETED)){
+            throw new RuntimeException("Session status is not ended hence cannot be Rated, status: "+session.getSessionStatus());
+        }
+
+        return ratingService.rateMentor(ratingDTO);
+    }
+
+    public SessionDTO joinSession(Long sessionId, String otp) {
+        return sessionManagementService.joinSession(sessionId, otp);
+    }
+
+    public SessionDTO endSession(Long sessionId) {
+        return sessionManagementService.endSessionByApplicant(sessionId);
     }
 }

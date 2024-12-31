@@ -27,5 +27,9 @@ public class Rating {
     @ManyToOne
     @JoinColumn(name = "mentor_id")
     private Mentor mentor;
+
+    @ManyToOne
+    @JoinColumn(name = "applicant_id")
+    private Applicant applicant;
 }
 

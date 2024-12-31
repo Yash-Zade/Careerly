@@ -90,4 +90,24 @@ public class ApplicantController {
         applicantService.uploadResume(file);
         return ResponseEntity.ok("Resume uploaded successfully");
     }
+
+    @PostMapping(path="/sessions/{sessionId}/request")
+    public ResponseEntity<SessionDTO> requestSession(@PathVariable Long sessionId){
+        return ResponseEntity.ok(applicantService.requestSession(sessionId));
+    }
+
+    @PostMapping(path="/sessions/{sessionId}/rateMentor")
+    public ResponseEntity<MentorDTO> rateMentor(@RequestBody RatingDTO ratingDTO, @PathVariable Long sessionId){
+        return ResponseEntity.ok(applicantService.rateMentor(ratingDTO, sessionId));
+    }
+
+    @PostMapping(path="/sessions/{sessionId}/join")
+    public ResponseEntity<SessionDTO> joinSession(@PathVariable Long sessionId,@RequestParam String otp){
+        return ResponseEntity.ok(applicantService.joinSession(sessionId,otp));
+    }
+
+    @PostMapping(path="/sessions/{sessionId}/end")
+    public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId){
+        return ResponseEntity.ok(applicantService.endSession(sessionId));
+    }
 }

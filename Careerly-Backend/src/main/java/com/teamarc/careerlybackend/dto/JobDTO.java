@@ -22,4 +22,6 @@ public class JobDTO {
     private List<String> skillsRequired;
 
     private JobStatus jobStatus;
+
+    private String company;
 }

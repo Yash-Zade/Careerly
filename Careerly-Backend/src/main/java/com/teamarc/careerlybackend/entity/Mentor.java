@@ -30,5 +30,6 @@ public class Mentor {
     @OneToMany(mappedBy = "mentor")
     private List<Rating> ratings;
 
+    private Double averageRating;
 }
 

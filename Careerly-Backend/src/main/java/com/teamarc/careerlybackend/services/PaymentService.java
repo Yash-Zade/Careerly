@@ -26,4 +26,18 @@ public class PaymentService {
         payment.setPaymentStatus(status);
         paymentRepository.save(payment);
     }
+    public Payment createNewPayment(Session session) {
+        Payment payment= Payment.builder()
+                .session(session)
+                .paymentStatus(PaymentStatus.PENDING)
+                .amount(session.getSessionFee())
+                .build();
+        return paymentRepository.save(payment);
+    }
+
+    public void refundPayment(Session session) {
+        Payment payment = paymentRepository.findBySession(session)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment not found for session with id: " + session.getSessionId()));
+        walletPaymentStrategy.refundPayment(payment);
+    }
 }

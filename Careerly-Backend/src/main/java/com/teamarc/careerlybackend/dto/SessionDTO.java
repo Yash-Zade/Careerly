@@ -25,9 +25,11 @@ public class SessionDTO {
 
     private RatingDTO rating;
 
-    private MentorDTO mentor;
+    private Long mentorId;
 
-    private ApplicantDTO applicant;
+    private Long applicantId;
+
+    private String sessionLink;
 
 }
 

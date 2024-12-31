@@ -1,5 +1,5 @@
 package com.teamarc.careerlybackend.entity.enums;
 
 public enum PaymentStatus {
-    COMPLETED, PENDING, FAILED
+    COMPLETED, PENDING, FAILED, REFUNDED
 }

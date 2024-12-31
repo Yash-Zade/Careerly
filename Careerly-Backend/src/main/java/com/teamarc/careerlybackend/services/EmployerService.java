@@ -119,8 +119,7 @@ public class EmployerService {
     }
 
     public ApplicantDTO getApplicant(Long applicantId) {
-        Applicant applicant = applicantService.getApplicantById(applicantId);
-        return modelMapper.map(applicant, ApplicantDTO.class);
+        return applicantService.getApplicantById(applicantId);
     }
 
 
