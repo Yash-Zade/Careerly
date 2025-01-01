@@ -2,12 +2,8 @@ package com.teamarc.careerlybackend.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -34,5 +30,14 @@ public class LoggingAspect {
     public void logAfterThrowing(JoinPoint joinPoint, Throwable error) {
         String methodName = joinPoint.getSignature().getName();
         log.error("Exception in method: {}() with error: {}", methodName, error.getMessage(), error);
+    }
+
+    @Around("execution(* com.teamarc.careerlybackend.services.*.*(..))")
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        Object proceed = joinPoint.proceed();
+        long executionTime = System.currentTimeMillis() - start;
+        log.info("Method {} executed in {} ms", joinPoint.getSignature().getName(), executionTime);
+        return proceed;
     }
 }
