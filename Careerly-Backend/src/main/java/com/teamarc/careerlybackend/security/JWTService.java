@@ -4,6 +4,7 @@ import com.teamarc.careerlybackend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -53,4 +54,9 @@ public class JWTService {
     }
 
 
+    public Cookie deleteRefreshTokenCookie() {
+        Cookie cookie = new Cookie("refreshToken", "");
+        cookie.setMaxAge(0);
+        return cookie;
+    }
 }

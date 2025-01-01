@@ -29,10 +29,15 @@ public class AuthController {
     @PostMapping(path = "/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO LoginRequestDTO, HttpServletResponse response){
         String[] tokens = authService.login(LoginRequestDTO.getEmail(), LoginRequestDTO.getPassword());
-        Cookie cookie = new Cookie("token",tokens[1]);
+        Cookie cookie = new Cookie("refreshToken",tokens[1]);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
         return ResponseEntity.ok(new LoginResponseDTO(tokens[0]));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        return ResponseEntity.ok(authService.logout(request, response));
     }
     @PostMapping("/refresh")
     public ResponseEntity<LoginResponseDTO> refresh(HttpServletRequest request) {

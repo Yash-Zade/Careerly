@@ -9,6 +9,7 @@ import com.teamarc.careerlybackend.repository.ApplicantRepository;
 import com.teamarc.careerlybackend.repository.JobApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,7 @@ public class ApplicantService {
     private final SessionService sessionService;
     private final RatingService ratingService;
     private final SessionManagementService sessionManagementService;
+    private final MentorService mentorService;
 
     @Transactional
     public JobApplicationDTO applyJob(Long jobId, JobApplicationDTO jobApplicationDTO) {
@@ -164,5 +166,33 @@ public class ApplicantService {
 
     public SessionDTO endSession(Long sessionId) {
         return sessionManagementService.endSessionByApplicant(sessionId);
+    }
+
+    public JobApplication getApplicationById(Long applicationId) {
+        return jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job application not found with id: " + applicationId));
+    }
+
+    public boolean isOwnerOfApplication(Long applicationId) {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            JobApplication jobApplication = getApplicationById(applicationId);
+            ApplicantDTO applicant = getApplicantById(jobApplication.getApplicationId());
+            User applicationUser = modelMapper.map(applicant.getUser(), User.class);
+            return user.equals(applicationUser);
+    }
+
+    public boolean isOwnerOfSession(Long sessionId){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SessionDTO session = sessionService.getSessionById(sessionId);
+        ApplicantDTO applicant = getApplicantById(session.getApplicantId());
+        User sessionUser = modelMapper.map(applicant.getUser(), User.class);
+        return user.equals(sessionUser);
+    }
+
+    public boolean isOwnerOfProfile(Long applicantId){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ApplicantDTO applicant = getApplicantById(applicantId);
+        User applicantUser = modelMapper.map(applicant.getUser(), User.class);
+        return user.equals(applicantUser);
     }
 }

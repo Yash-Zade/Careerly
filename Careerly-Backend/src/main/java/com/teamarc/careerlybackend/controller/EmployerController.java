@@ -4,6 +4,7 @@ import com.teamarc.careerlybackend.dto.ApplicantDTO;
 import com.teamarc.careerlybackend.dto.EmployerDTO;
 import com.teamarc.careerlybackend.dto.JobApplicationDTO;
 import com.teamarc.careerlybackend.dto.JobDTO;
+import com.teamarc.careerlybackend.entity.enums.ApplicationStatus;
 import com.teamarc.careerlybackend.services.EmployerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -34,6 +36,7 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.getEmployerProfile(id));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfProfile(#id)")
     @PutMapping(path="/profile/{id}")
     public ResponseEntity<EmployerDTO> updateEmployerProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
         return ResponseEntity.ok(employerService.updateEmployerProfile(id, object));
@@ -54,6 +57,7 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.getAllJobs(pageRequest));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#applicationId)")
     @GetMapping("/jobs/{jobId}")
     public ResponseEntity<JobDTO> getJob(@PathVariable Long jobId) {
         return ResponseEntity.ok(employerService.getJob(jobId));
@@ -64,16 +68,19 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.createJob(job));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#applicationId)")
     @PutMapping("/jobs/{jobId}")
     public ResponseEntity<JobDTO> updateJob(@PathVariable Long jobId, @RequestBody Map<String, Object> updates) {
         return ResponseEntity.ok(employerService.updateJob(jobId, updates));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#applicationId)")
     @DeleteMapping("/jobs/{jobId}")
     public ResponseEntity<JobDTO> deleteJob(@PathVariable Long jobId) {
         return ResponseEntity.ok(employerService.deleteJob(jobId));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#applicationId)")
     @PostMapping("/jobs/{jobId}/close")
     public ResponseEntity<JobDTO> closeJob(@PathVariable Long jobId) {
         return ResponseEntity.ok(employerService.closeJob(jobId));
@@ -93,9 +100,10 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.searchApplications(keyword, pageRequest, pageable));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfApplication(#applicationId)")
     @GetMapping("/applications/{applicationId}/status")
-    public ResponseEntity<String> checkApplicationStatus(@PathVariable Long applicationId) {
-        String status = employerService.checkApplicationStatus(applicationId);
+    public ResponseEntity<ApplicationStatus> checkApplicationStatus(@PathVariable Long applicationId) {
+        ApplicationStatus status = employerService.checkApplicationStatus(applicationId);
         return ResponseEntity.ok(status);
     }
 
@@ -111,6 +119,7 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.getApplicant(applicantId));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#jobId)")
     @GetMapping("/jobs/{jobId}/applicants")
     public ResponseEntity<Page<ApplicantDTO>> getApplicants(@PathVariable Long jobId, @RequestParam(defaultValue = "0") Integer pageOffset,
                                                             @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable) {
@@ -118,21 +127,19 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.getApplicants(jobId, pageRequest, pageable));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfJob(#jobId)")
     @GetMapping("/jobs/{jobId}/applicants/{applicantId}")
     public ResponseEntity<JobApplicationDTO> getApplicantApplication(@PathVariable Long jobId, @PathVariable Long applicantId) {
         return ResponseEntity.ok(employerService.getApplicantApplication(jobId, applicantId));
     }
 
+    @PreAuthorize("@employerService.isOwnerOfApplication(#applicationId)")
     @PostMapping("/applications/{applicationId}/status")
     public ResponseEntity<JobApplicationDTO> changeApplicationStatus(@PathVariable Long applicationId, @RequestParam String status) {
         return ResponseEntity.ok(employerService.changeApplicationStatus(applicationId, status));
     }
 
-    @PostMapping("/applications/{applicationId}/withdraw")
-    public ResponseEntity<JobApplicationDTO> withdrawApplicant(@PathVariable Long applicationId) {
-        return ResponseEntity.ok(employerService.withdrawApplicant(applicationId));
-    }
-
+    @PreAuthorize("@employerService.isOwnerOfApplication(#applicationId)")
     @GetMapping("/jobs/{jobId}/applications/{status}")
     public ResponseEntity<Page<JobApplicationDTO>> getApplicationsByStatus(@PathVariable Long jobId, @PathVariable String status, @RequestParam(defaultValue = "0") Integer pageOffset,
                                                                            @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable) {
@@ -140,7 +147,7 @@ public class EmployerController {
         return ResponseEntity.ok(employerService.getApplicationsByStatus(jobId, status, pageRequest, pageable));
     }
 
-
+    @PreAuthorize("@employerService.isOwnerOfApplication(#applicationId)")
     @GetMapping("/applications/{applicationId}/applicant")
     public ResponseEntity<JobApplicationDTO> getApplicationsApplicant(@PathVariable Long applicationId) {
         return ResponseEntity.ok(employerService.getApplicationsApplicant(applicationId));

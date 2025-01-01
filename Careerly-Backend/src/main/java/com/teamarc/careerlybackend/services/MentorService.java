@@ -110,6 +110,20 @@ public class MentorService {
     public Double getMyRating() {
         Mentor mentor = getCurrentMentor();
         return mentor.getAverageRating();
+    }
 
+    public boolean isOwnerOfSession(Long sessionId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SessionDTO session = sessionService.getSessionById(sessionId);
+        MentorDTO mentor = getProfileById(session.getMentorId());
+        User sessionUser = modelMapper.map(mentor.getUser(), User.class);
+        return user.equals(sessionUser);
+    }
+
+    public boolean isOwnerOfProfile(Long mentorId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MentorDTO mentor = getProfileById(mentorId);
+        User mentorUser = modelMapper.map(mentor.getUser(), User.class);
+        return user.equals(mentorUser);
     }
 }

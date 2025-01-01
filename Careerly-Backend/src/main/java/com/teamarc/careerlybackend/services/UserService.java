@@ -2,6 +2,7 @@ package com.teamarc.careerlybackend.services;
 
 
 import com.teamarc.careerlybackend.entity.User;
+import com.teamarc.careerlybackend.entity.enums.Role;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,9 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    }
+
+    public User loadUserByRole(Role role) {
+        return userRepository.findByRoles(role);
     }
 }

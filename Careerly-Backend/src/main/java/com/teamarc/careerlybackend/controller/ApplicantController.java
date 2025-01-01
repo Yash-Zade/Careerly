@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class ApplicantController {
         return ResponseEntity.ok(applicantService.getMyProfile());
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfProfile(#id)")
     @PutMapping(path="/profile/{id}")
     public ResponseEntity<ApplicantDTO> updateProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
         return ResponseEntity.ok(applicantService.updateProfile(id, object));
@@ -47,6 +48,7 @@ public class ApplicantController {
         return ResponseEntity.ok(applicantService.applyJob(jobId,jobApplication));
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfApplication(#applicationId)")
     @PostMapping(path="/jobs/{applicationId}/withdraw")
     public ResponseEntity<JobApplicationDTO> withdrawJobApplication(@PathVariable Long applicationId){
         return ResponseEntity.ok(applicantService.withdrawApplication(applicationId));
@@ -78,6 +80,7 @@ public class ApplicantController {
         return ResponseEntity.ok(applicantService.searchApplications(keyword, pageRequest,pageable));
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfApplication(#applicationId)")
     @GetMapping(path="/applications/{applicationId}/status")
     public ResponseEntity<String> checkApplicationStatus(@PathVariable Long applicationId){
         String status = applicantService.checkApplicationStatus(applicationId);
@@ -91,21 +94,25 @@ public class ApplicantController {
         return ResponseEntity.ok("Resume uploaded successfully");
     }
 
+
     @PostMapping(path="/sessions/{sessionId}/request")
     public ResponseEntity<SessionDTO> requestSession(@PathVariable Long sessionId){
         return ResponseEntity.ok(applicantService.requestSession(sessionId));
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfSession(#sessionId)")
     @PostMapping(path="/sessions/{sessionId}/rateMentor")
     public ResponseEntity<MentorDTO> rateMentor(@RequestBody RatingDTO ratingDTO, @PathVariable Long sessionId){
         return ResponseEntity.ok(applicantService.rateMentor(ratingDTO, sessionId));
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfSession(#sessionId)")
     @PostMapping(path="/sessions/{sessionId}/join")
     public ResponseEntity<SessionDTO> joinSession(@PathVariable Long sessionId,@RequestParam String otp){
         return ResponseEntity.ok(applicantService.joinSession(sessionId,otp));
     }
 
+    @PreAuthorize("@applicantService.isOwnerOfSession(#sessionId)")
     @PostMapping(path="/sessions/{sessionId}/end")
     public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId){
         return ResponseEntity.ok(applicantService.endSession(sessionId));

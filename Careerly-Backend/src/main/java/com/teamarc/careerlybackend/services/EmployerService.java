@@ -107,10 +107,10 @@ public class EmployerService {
         return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 
-    public String checkApplicationStatus(Long applicationId) {
+    public ApplicationStatus checkApplicationStatus(Long applicationId) {
         JobApplication jobApplication = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job Application not found with id: " + applicationId));
-        return jobApplication.getApplicationStatus().name();
+        return jobApplication.getApplicationStatus();
     }
 
     public Page<ApplicantDTO> searchApplicants(String keyword, PageRequest pageRequest, Pageable pageable) {
@@ -181,5 +181,37 @@ public class EmployerService {
         Employer employer = employerRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employer not found with id: " + id));
         return modelMapper.map(employer, EmployerDTO.class);
+    }
+
+    public boolean isOwnerOfJob(Long jobId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Job job = getJobById(jobId);
+        EmployerDTO employer = getEmployerProfile(job.getPostedBy().getEmployerId());
+        User jobUser = modelMapper.map(employer.getUser(), User.class);
+        return user.equals(jobUser);
+    }
+
+    public boolean isOwnerOfApplication(Long applicationId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        JobApplication jobApplication = getApplicationById(applicationId);
+        EmployerDTO employerDTO = getEmployerProfile(jobApplication.getJob().getPostedBy().getEmployerId());
+        User applicationUser = modelMapper.map(employerDTO.getUser(), User.class);
+        return user.equals(applicationUser);
+    }
+
+    public boolean isOwnerOfProfile(Long id) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EmployerDTO employerDTO = getEmployerProfile(id);
+        User profileUser = modelMapper.map(employerDTO.getUser(), User.class);
+        return user.equals(profileUser);
+    }
+
+    private JobApplication getApplicationById(Long applicationId) {
+        return jobApplicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Job Application not found with id: " + applicationId));
+    }
+
+    private Job getJobById(Long jobId) {
+        return jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Job not found with id: " + jobId));
     }
 }

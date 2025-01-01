@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.getProfileById(id));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfProfile(#id)")
     @PutMapping(path ="/profile/{id}")
     public ResponseEntity<MentorDTO> updateMentorProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
         return ResponseEntity.ok(mentorService.updateProfile(id, object));
@@ -48,6 +50,7 @@ public class MentorController {
     }
 
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @GetMapping(path ="/sessions/{id}")
     public ResponseEntity<SessionDTO> getSessionById(@PathVariable Long id){
         return ResponseEntity.ok(mentorService.getSessionById(id));
@@ -58,20 +61,25 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.createSession(session));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @PutMapping(path ="/sessions/{id}")
     public ResponseEntity<SessionDTO> updateSession(@RequestBody Map<String, Object> object, @PathVariable Long id){
         return ResponseEntity.ok(mentorService.updateSession(id, object));
     }
+
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @PostMapping(path ="/sessions/{id}/accept")
     public ResponseEntity<SessionDTO> acceptSession(@PathVariable Long id){
         return ResponseEntity.ok(mentorService.acceptSession(id));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @PostMapping(path ="/sessions/{sessionId}/cancelled")
     public ResponseEntity<SessionDTO> cancelSession(@PathVariable Long sessionId){
         return ResponseEntity.ok(mentorService.cancelSession(sessionId));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @PostMapping(path ="/sessions/{sessionId}/end")
     public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId){
         return ResponseEntity.ok(mentorService.endSession(sessionId));
@@ -82,6 +90,7 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.startSession(sessionId));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
     @GetMapping(path ="/sessions/{sessionId}/rating")
     public ResponseEntity<RatingDTO> rateMentor(@PathVariable Long sessionId){
         return ResponseEntity.ok(mentorService.rateMentor(sessionId));

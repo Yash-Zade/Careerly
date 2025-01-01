@@ -3,15 +3,18 @@ package com.teamarc.careerlybackend.services;
 import com.teamarc.careerlybackend.dto.SignupDTO;
 import com.teamarc.careerlybackend.dto.UserDTO;
 import com.teamarc.careerlybackend.entity.User;
-import com.teamarc.careerlybackend.entity.enums.Role;
 import com.teamarc.careerlybackend.exceptions.RuntimeConflictException;
 import com.teamarc.careerlybackend.repository.UserRepository;
 import com.teamarc.careerlybackend.security.JWTService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,15 +58,21 @@ public class AuthService{
         User savedUser = userRepository.save(mappedUser);
         applicantService.createNewApplicant(savedUser);
         walletService.createNewWallet(savedUser);
-
         return modelMapper.map(savedUser, UserDTO.class);
     }
 
     public String refreshToken(String refreshToken) {
-
         Long userId = jwtService.getUserIdFromToken(refreshToken);
         User user = userService.getUserById(userId);
         return jwtService.generateAccessToken(user);
     }
 
+    public Void logout(HttpServletRequest request, HttpServletResponse response) {
+        SecurityContextHolder.clearContext();
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return null;
+    }
 }
