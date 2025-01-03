@@ -9,7 +9,7 @@ public class MessageDTO {
 
     private UserDTO sender;
 
-    private UserDTO receiver;
+//    private UserDTO receiver;
 
     private String messageContent;
 
