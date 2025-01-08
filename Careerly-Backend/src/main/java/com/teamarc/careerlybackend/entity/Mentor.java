@@ -31,5 +31,9 @@ public class Mentor {
     private List<Rating> ratings;
 
     private Double averageRating;
+
+    private String bio;
+
+    private Long totalSessions;
 }
 

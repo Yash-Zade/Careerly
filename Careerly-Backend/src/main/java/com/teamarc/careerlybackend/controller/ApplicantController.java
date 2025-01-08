@@ -102,7 +102,7 @@ public class ApplicantController {
 
     @PreAuthorize("@applicantService.isOwnerOfSession(#sessionId)")
     @PostMapping(path="/sessions/{sessionId}/rateMentor")
-    public ResponseEntity<MentorDTO> rateMentor(@RequestBody RatingDTO ratingDTO, @PathVariable Long sessionId){
+    public ResponseEntity<MentorProfileDTO> rateMentor(@RequestBody RatingDTO ratingDTO, @PathVariable Long sessionId){
         return ResponseEntity.ok(applicantService.rateMentor(ratingDTO, sessionId));
     }
 

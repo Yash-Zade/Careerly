@@ -1,28 +1,33 @@
 package com.teamarc.careerlybackend.controller;
 
 import com.teamarc.careerlybackend.dto.MentorDTO;
+import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.RatingDTO;
 import com.teamarc.careerlybackend.dto.SessionDTO;
 import com.teamarc.careerlybackend.services.MentorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path="/mentor")
+@RequestMapping(path="/mentors")
 @RequiredArgsConstructor
 public class MentorController {
 
     private final MentorService mentorService;
 
+    @GetMapping
+    public ResponseEntity<Page<MentorDTO>> getAllMentors(@RequestParam(defaultValue = "0") Integer pageOffset,
+                                                      @RequestParam(defaultValue = "10", required = false) Integer pageSize){
+        return ResponseEntity.ok(mentorService.getALLMentors(pageOffset, pageSize));
+    }
+
     @GetMapping(path = "/profile")
-    public ResponseEntity<MentorDTO> getMyProfile(){
+    public ResponseEntity<MentorProfileDTO> getMyProfile(){
         return ResponseEntity.ok(mentorService.getMyProfile());
     }
 
@@ -33,13 +38,13 @@ public class MentorController {
 
     @PreAuthorize("@mentorService.isOwnerOfProfile(#id)")
     @PutMapping(path ="/profile/{id}")
-    public ResponseEntity<MentorDTO> updateMentorProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
+    public ResponseEntity<MentorProfileDTO> updateMentorProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
         return ResponseEntity.ok(mentorService.updateProfile(id, object));
     }
 
     @GetMapping(path ="/profile/rating")
     public ResponseEntity<Double> getMyRating(){
-        return ResponseEntity.ok(mentorService.getMyRating());
+        return ResponseEntity.ok(mentorService.getAverageRating());
     }
 
 

@@ -1,11 +1,13 @@
 package com.teamarc.careerlybackend.repository;
 
+import com.teamarc.careerlybackend.entity.Applicant;
 import com.teamarc.careerlybackend.entity.Job;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,4 +22,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "OR LOWER(CAST(j.jobStatus AS string)) LIKE LOWER(CONCAT('%', :keyword, '%'))"
     )
     Page<Job> searchJobs(String keyword, PageRequest pageRequest, Pageable pageable);
+
+
+//    Page<Job> findRecommendedJobs(@Param("applicant") Applicant applicant, @Param("skillMatchWeight") double skillMatchWeight, @Param("locationWeight") double locationWeight, Pageable pageable);
+
 }

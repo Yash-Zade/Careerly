@@ -1,6 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
 import com.teamarc.careerlybackend.dto.MentorDTO;
+import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.RatingDTO;
 import com.teamarc.careerlybackend.dto.SessionDTO;
 import com.teamarc.careerlybackend.entity.Mentor;
@@ -11,12 +12,12 @@ import com.teamarc.careerlybackend.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,9 +35,9 @@ public class MentorService {
         return mentorRepository.save(mentor);
     }
 
-    public MentorDTO getMyProfile() {
+    public MentorProfileDTO getMyProfile() {
         Mentor mentor = getCurrentMentor();
-        return modelMapper.map(mentor, MentorDTO.class);
+        return modelMapper.map(mentor, MentorProfileDTO.class);
     }
 
     private Mentor getCurrentMentor() {
@@ -52,7 +53,7 @@ public class MentorService {
         return modelMapper.map(mentor, MentorDTO.class);
     }
 
-    public MentorDTO updateProfile(Long id, Map<String, Object> object) {
+    public MentorProfileDTO updateProfile(Long id, Map<String, Object> object) {
         Mentor mentor = mentorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mentor not found with id: " + id));
         object.forEach((key, value) -> {
@@ -61,7 +62,7 @@ public class MentorService {
             ReflectionUtils.setField(field, mentor, value);
         });
         Mentor updatedMentor = mentorRepository.save(mentor);
-        return modelMapper.map(updatedMentor, MentorDTO.class);
+        return modelMapper.map(updatedMentor, MentorProfileDTO.class);
     }
 
     public Page<SessionDTO> getSessions(Integer pageOffset, Integer pageSize) {
@@ -107,7 +108,7 @@ public class MentorService {
         return ratingService.getRatings(pageOffset, pageSize);
     }
 
-    public Double getMyRating() {
+    public Double getAverageRating() {
         Mentor mentor = getCurrentMentor();
         return mentor.getAverageRating();
     }
@@ -125,5 +126,10 @@ public class MentorService {
         MentorDTO mentor = getProfileById(mentorId);
         User mentorUser = modelMapper.map(mentor.getUser(), User.class);
         return user.equals(mentorUser);
+    }
+
+    public Page<MentorDTO> getALLMentors(Integer pageOffset, Integer pageSize) {
+        return mentorRepository.findAll(PageRequest.of(pageOffset, pageSize))
+                .map(mentor -> modelMapper.map(mentor, MentorDTO.class));
     }
 }

@@ -1,7 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
 
-import com.teamarc.careerlybackend.dto.MentorDTO;
+import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.RatingDTO;
 import com.teamarc.careerlybackend.entity.Mentor;
 import com.teamarc.careerlybackend.entity.Rating;
@@ -25,7 +25,7 @@ public class RatingService {
     private final ModelMapper modelMapper;
 
 
-    public MentorDTO rateMentor(RatingDTO ratingDTO) {
+    public MentorProfileDTO rateMentor(RatingDTO ratingDTO) {
         Mentor mentor = ratingDTO.getSession().getMentor();
         Rating ratingObj = ratingRepository.findBySession(ratingDTO.getSession())
                 .orElseThrow(() -> new ResourceNotFoundException("Rating not found for session with id: " + ratingDTO.getSession().getSessionId()));
@@ -41,7 +41,7 @@ public class RatingService {
         mentor.setAverageRating(newRating);
         mentor.getRatings().add(ratingObj);
         Mentor savedMentor = mentorRepository.save(mentor);
-        return modelMapper.map(savedMentor, MentorDTO.class);
+        return modelMapper.map(savedMentor, MentorProfileDTO.class);
     }
 
 

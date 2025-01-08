@@ -1,7 +1,7 @@
 package com.teamarc.careerlybackend.controller;
 
 import com.teamarc.careerlybackend.dto.EmployerDTO;
-import com.teamarc.careerlybackend.dto.MentorDTO;
+import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.OnBoardNewEmployerDTO;
 import com.teamarc.careerlybackend.dto.OnboardNewMentorDTO;
 import com.teamarc.careerlybackend.services.AdminService;
@@ -27,7 +27,7 @@ public class AdminController {
 
 
     @PostMapping(path="onBoardNewMentor/{userId}")
-    public ResponseEntity<MentorDTO> onBoardNewMentor(@PathVariable Long userId, @RequestBody OnboardNewMentorDTO onboardNewMentorDTO){
+    public ResponseEntity<MentorProfileDTO> onBoardNewMentor(@PathVariable Long userId, @RequestBody OnboardNewMentorDTO onboardNewMentorDTO){
         return new ResponseEntity<>(adminService.onboardNewMentor(userId, onboardNewMentorDTO), HttpStatus.CREATED);
     }
 }

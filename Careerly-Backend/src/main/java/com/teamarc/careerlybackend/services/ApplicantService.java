@@ -9,7 +9,6 @@ import com.teamarc.careerlybackend.repository.ApplicantRepository;
 import com.teamarc.careerlybackend.repository.JobApplicationRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -92,7 +91,6 @@ public class ApplicantService {
     }
 
     public ApplicantDTO updateProfile(Long applicantId, Map<String, Object> updates) {
-        checkApplicantExistsById(applicantId);
         Applicant applicant = applicantRepository.findById(applicantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId));
         updates.forEach((field, value) -> {
@@ -101,13 +99,6 @@ public class ApplicantService {
             ReflectionUtils.setField(fieldToBeUpdated, applicant, value);
         });
         return modelMapper.map(applicantRepository.save(applicant), ApplicantDTO.class);
-    }
-
-
-    public void checkApplicantExistsById(Long applicantId) {
-        if (!applicantRepository.existsById(applicantId)) {
-            throw new ResourceNotFoundException("Applicant not found with id: " + applicantId);
-        }
     }
 
     public Page<JobApplicationDTO> searchApplications(String keyword, PageRequest pageRequest, Pageable pageable) {
@@ -147,7 +138,7 @@ public class ApplicantService {
     }
 
 
-    public MentorDTO rateMentor(RatingDTO ratingDTO,Long sessionId) {
+    public MentorProfileDTO rateMentor(RatingDTO ratingDTO, Long sessionId) {
         Session session= modelMapper.map(sessionService.getSessionById(sessionId), Session.class);
         Applicant applicant=getCurrentApplicant();
         if(!applicant.equals(session.getApplicant())){

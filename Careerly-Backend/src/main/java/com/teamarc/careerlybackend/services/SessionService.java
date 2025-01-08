@@ -1,13 +1,8 @@
 package com.teamarc.careerlybackend.services;
 
 
-import com.teamarc.careerlybackend.dto.ApplicantDTO;
-import com.teamarc.careerlybackend.dto.MentorDTO;
 import com.teamarc.careerlybackend.dto.SessionDTO;
-import com.teamarc.careerlybackend.entity.Applicant;
-import com.teamarc.careerlybackend.entity.Mentor;
 import com.teamarc.careerlybackend.entity.Session;
-import com.teamarc.careerlybackend.entity.enums.SessionStatus;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.MentorRepository;
 import com.teamarc.careerlybackend.repository.SessionRepository;
@@ -20,9 +15,7 @@ import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MentorDTO {
+public class MentorProfileDTO {
 
     private Long mentorId;
 
@@ -13,9 +13,13 @@ public class MentorDTO {
 
     private UserDTO user;
 
-    private Long totalSessions;
+    private List<SessionDTO> sessions;
+
+    private List<RatingDTO> ratings;
 
     private Double averageRating;
+
+    private Long totalSessions;
 
     private String bio;
 }

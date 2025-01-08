@@ -69,6 +69,7 @@ public class SessionManagementService {
         if(session.getSessionStatus().name().equals("SCHEDULED")){
             session.setSessionStatus(SessionStatus.COMPLETED);
             session.setSessionEndTime(LocalDateTime.now());
+            session.getMentor().setTotalSessions(session.getMentor().getTotalSessions()+1);
             Session savedSession = sessionRepository.save(session);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
