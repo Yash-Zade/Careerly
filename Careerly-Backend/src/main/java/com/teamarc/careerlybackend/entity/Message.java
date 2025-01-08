@@ -3,6 +3,8 @@ package com.teamarc.careerlybackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,6 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 public class Message {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
