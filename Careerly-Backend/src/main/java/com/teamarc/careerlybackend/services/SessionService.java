@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +62,5 @@ public class SessionService {
         Session updatedSession = sessionRepository.save(session);
         return modelMapper.map(updatedSession, SessionDTO.class);
     }
-
-
 
 }

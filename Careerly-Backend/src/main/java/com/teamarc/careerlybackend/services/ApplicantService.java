@@ -39,7 +39,7 @@ public class ApplicantService {
     @Transactional
     public JobApplicationDTO applyJob(Long jobId, JobApplicationDTO jobApplicationDTO) {
 
-        Job job = jobService.getJobById(jobId);
+        Job job = modelMapper.map(jobService.getJobById(jobId), Job.class);
         if(job.getJobStatus().toString().equals("CLOSED")){
             throw new RuntimeException("Job is closed");
         }
@@ -50,7 +50,7 @@ public class ApplicantService {
 
         JobApplication jobApplication = modelMapper.map(jobApplicationDTO, JobApplication.class);
         jobApplication.setApplicationStatus(ApplicationStatus.APPLIED);
-        jobApplication.setJob(jobService.getJobById(jobApplicationDTO.getJobId()));
+        jobApplication.setJob(modelMapper.map(jobService.getJobById(jobApplicationDTO.getJobId()), Job.class));
         JobApplication savedJobApplication = jobApplicationRepository.save(jobApplication);
         emailSenderService.sendEmail(jobApplication.getApplicant().getUser().getEmail(), "Job Application", "Your application for job: "+job.getTitle()+" has been submitted successfully");
         return modelMapper.map(savedJobApplication, JobApplicationDTO.class);
@@ -110,7 +110,7 @@ public class ApplicantService {
     }
 
     public Page<JobDTO> searchJob(String keyword, PageRequest pageRequest, Pageable pageable) {
-        Page<Job> jobs = jobService.searchJobs(keyword, pageRequest, pageable);
+        Page<Job> jobs = jobService.searchJobs(keyword, pageRequest, pageable).map((element) -> modelMapper.map(element, Job.class));
         return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 
@@ -131,7 +131,7 @@ public class ApplicantService {
     }
 
     public Page<JobDTO> getAllJobs(PageRequest pageRequest) {
-        Page<Job> jobs = jobService.getAllJobs(pageRequest);
+        Page<Job> jobs = jobService.getAllJobs(pageRequest).map((element) -> modelMapper.map(element, Job.class));
         return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 
