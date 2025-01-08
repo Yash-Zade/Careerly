@@ -15,5 +15,5 @@ public class ChatRoomDTO {
 
     private Long roomId;
     private String roomName;
-    private List<Message> message;
+    private List<MessageDTO> message;
 }
