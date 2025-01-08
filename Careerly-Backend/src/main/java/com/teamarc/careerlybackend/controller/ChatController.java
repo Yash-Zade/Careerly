@@ -1,15 +1,13 @@
 package com.teamarc.careerlybackend.controller;
 
 
-import com.teamarc.careerlybackend.entity.ChatRoom;
+import com.teamarc.careerlybackend.dto.PrivateMessageDTO;
 import com.teamarc.careerlybackend.entity.Message;
-import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.paylod.MessageRequest;
-import com.teamarc.careerlybackend.repository.MessageRepository;
-import com.teamarc.careerlybackend.repository.RoomRepository;
+import com.teamarc.careerlybackend.paylod.PrivateMessageRequest;
+
 import com.teamarc.careerlybackend.services.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -35,6 +33,10 @@ public class ChatController {
         return chatService.sendMessage(request, roomId);
     }
 
-
+    @MessageMapping("/privateMessage")
+    @SendTo("/private")
+    public PrivateMessageDTO sendPrivateMessage(@RequestBody PrivateMessageRequest request) {
+        return chatService.sendPrivateMessage(request);
+    }
 
 }
