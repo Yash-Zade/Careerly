@@ -27,12 +27,12 @@ public class MentorController {
     }
 
     @GetMapping(path = "/profile")
-    public ResponseEntity<MentorProfileDTO> getMyProfile(){
-        return ResponseEntity.ok(mentorService.getMyProfile());
+    public ResponseEntity<MentorProfileDTO> getMentorProfile(){
+        return ResponseEntity.ok(mentorService.getMentorProfile());
     }
 
     @GetMapping(path ="/profile/{id}")
-    public ResponseEntity<MentorDTO> getProfileById(Long id){
+    public ResponseEntity<MentorDTO> getProfileById(@PathVariable Long id){
         return ResponseEntity.ok(mentorService.getProfileById(id));
     }
 
@@ -43,8 +43,8 @@ public class MentorController {
     }
 
     @GetMapping(path ="/profile/rating")
-    public ResponseEntity<Double> getMyRating(){
-        return ResponseEntity.ok(mentorService.getAverageRating());
+    public ResponseEntity<Double> getMentorsAverageRating(){
+        return ResponseEntity.ok(mentorService.getMentorsAverageRating());
     }
 
 

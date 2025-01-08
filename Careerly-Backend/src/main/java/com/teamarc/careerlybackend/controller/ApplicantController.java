@@ -25,8 +25,8 @@ public class ApplicantController {
 
 
     @GetMapping(path="/profile")
-    public ResponseEntity<ApplicantDTO> getMyProfile(){
-        return ResponseEntity.ok(applicantService.getMyProfile());
+    public ResponseEntity<ApplicantDTO> getApplicantProfile(){
+        return ResponseEntity.ok(applicantService.getApplicantProfile());
     }
 
     @PreAuthorize("@applicantService.isOwnerOfProfile(#id)")
@@ -37,10 +37,10 @@ public class ApplicantController {
 
 
     @GetMapping(path="/jobs")
-    public ResponseEntity<Page<JobDTO>> getJobs(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                               @RequestParam(defaultValue = "10", required = false) Integer pageSize){
+    public ResponseEntity<Page<JobDTO>> getAllJobs(@RequestParam(defaultValue = "0") Integer pageOffset,
+                                                   @RequestParam(defaultValue = "10", required = false) Integer pageSize){
         PageRequest pageRequest = PageRequest.of(pageOffset, pageSize, Sort.by(Sort.Direction.DESC, "postedDate", "jobId"));
-        return ResponseEntity.ok(applicantService.getJobs(pageRequest));
+        return ResponseEntity.ok(applicantService.getAllJobs(pageRequest));
     }
 
     @PostMapping(path="/jobs/{jobId}/apply")
@@ -65,10 +65,10 @@ public class ApplicantController {
 
 
     @GetMapping(path="/job-applications")
-    public ResponseEntity<Page<JobApplicationDTO>> getJobApplications(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                                     @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable){
+    public ResponseEntity<Page<JobApplicationDTO>> getAllJobApplications(@RequestParam(defaultValue = "0") Integer pageOffset,
+                                                                         @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable){
         PageRequest pageRequest = PageRequest.of(pageOffset, pageSize, Sort.by(Sort.Direction.DESC, "appliedDate", "applicationId"));
-        return ResponseEntity.ok(applicantService.getJobApplications(pageRequest,pageable));
+        return ResponseEntity.ok(applicantService.getAllJobApplications(pageRequest,pageable));
     }
 
 

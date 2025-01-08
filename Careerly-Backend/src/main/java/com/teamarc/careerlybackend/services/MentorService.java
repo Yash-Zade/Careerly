@@ -35,7 +35,7 @@ public class MentorService {
         return mentorRepository.save(mentor);
     }
 
-    public MentorProfileDTO getMyProfile() {
+    public MentorProfileDTO getMentorProfile() {
         Mentor mentor = getCurrentMentor();
         return modelMapper.map(mentor, MentorProfileDTO.class);
     }
@@ -108,7 +108,7 @@ public class MentorService {
         return ratingService.getRatings(pageOffset, pageSize);
     }
 
-    public Double getAverageRating() {
+    public Double getMentorsAverageRating() {
         Mentor mentor = getCurrentMentor();
         return mentor.getAverageRating();
     }

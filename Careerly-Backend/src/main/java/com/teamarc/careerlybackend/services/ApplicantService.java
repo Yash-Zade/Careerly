@@ -64,13 +64,13 @@ public class ApplicantService {
         return jobApplicationDTO;
     }
 
-    public ApplicantDTO getMyProfile() {
+    public ApplicantDTO getApplicantProfile() {
         Applicant applicant = getCurrentApplicant();
         return modelMapper.map(applicant, ApplicantDTO.class);
 
     }
 
-    public Page<JobApplicationDTO> getJobApplications(PageRequest pageRequest, Pageable pageable) {
+    public Page<JobApplicationDTO> getAllJobApplications(PageRequest pageRequest, Pageable pageable) {
         Page<JobApplication> jobApplications = jobApplicationRepository.findByApplicant(getCurrentApplicant(), pageRequest, pageable);
         return jobApplications.map(jobApplication -> modelMapper.map(jobApplication, JobApplicationDTO.class));
     }
@@ -127,13 +127,13 @@ public class ApplicantService {
                 .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId)), ApplicantDTO.class);
     }
 
-    public Page<JobDTO> getJobs(PageRequest pageRequest) {
+    public Page<JobDTO> getAllJobs(PageRequest pageRequest) {
         Page<Job> jobs = jobService.getAllJobs(pageRequest);
         return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 
     public SessionDTO requestSession(Long sessionId) {
-        ApplicantDTO applicant = getMyProfile();
+        ApplicantDTO applicant = getApplicantProfile();
         return sessionManagementService.requestSession(sessionId,applicant);
     }
 
