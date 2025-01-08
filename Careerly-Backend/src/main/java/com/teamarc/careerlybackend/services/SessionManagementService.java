@@ -6,7 +6,6 @@ import com.teamarc.careerlybackend.entity.Applicant;
 import com.teamarc.careerlybackend.entity.Session;
 import com.teamarc.careerlybackend.entity.enums.SessionStatus;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
-import com.teamarc.careerlybackend.repository.ApplicantRepository;
 import com.teamarc.careerlybackend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +22,7 @@ public class SessionManagementService {
     private final ModelMapper modelMapper;
     private final RatingService ratingService;
     private final PaymentService paymentService;
+    private final EmailSenderService emailSenderService;
 
 
     public SessionDTO startSession(Long sessionId) {
@@ -87,6 +87,13 @@ public class SessionManagementService {
         session.setSessionStatus(SessionStatus.CANCELLED);
         Session savedSession = sessionRepository.save(session);
         paymentService.refundPayment(savedSession);
+        emailSenderService.sendEmail(session.getApplicant().getUser().getEmail(),
+                "Session Cancelled",
+                "Your session has been cancelled by the mentor, You will be refunded the session fee");
+
+        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
+                "Session Cancelled",
+                "You have cancelled the session with "+session.getApplicant().getUser().getName());
         return modelMapper.map(session,SessionDTO.class);
 
     }
@@ -98,6 +105,13 @@ public class SessionManagementService {
         session.setApplicant(modelMapper.map(applicant, Applicant.class));
         Session savedSession = sessionRepository.save(session);
         paymentService.createNewPayment(session);
+        emailSenderService.sendEmail(applicant.getUser().getEmail(),
+                "Session Requested",
+                "Your session has been requested to the mentor, Please wait for the mentor to accept the session");
+
+        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
+                "Session Requested",
+                "You have a new session request from "+applicant.getUser().getName());
         return modelMapper.map(savedSession, SessionDTO.class);
     }
 
@@ -111,6 +125,9 @@ public class SessionManagementService {
             Session savedSession = sessionRepository.save(session);
             paymentService.processPayment(session);
             ratingService.creatNewRating(session);
+            emailSenderService.sendEmail(session.getApplicant().getUser().getEmail(),
+                    "Session Accepted",
+                    "Your session has been accepted by the mentor, Here is your otp to join the session: "+session.getOtp());
             return modelMapper.map(savedSession, SessionDTO.class);
         }
         throw new RuntimeException("Session not found with Id: "+ session.getSessionId());

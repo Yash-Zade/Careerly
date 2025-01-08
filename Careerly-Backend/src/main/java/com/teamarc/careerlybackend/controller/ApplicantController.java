@@ -117,4 +117,10 @@ public class ApplicantController {
     public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId){
         return ResponseEntity.ok(applicantService.endSession(sessionId));
     }
+
+    @PreAuthorize("@applicantService.isOwnerOfSession(#sessionId)")
+    @PostMapping(path="/sessions/{sessionId}/cancle")
+    public ResponseEntity<SessionDTO> cancleSession(@PathVariable Long sessionId){
+        return ResponseEntity.ok(applicantService.cancelSession(sessionId));
+    }
 }

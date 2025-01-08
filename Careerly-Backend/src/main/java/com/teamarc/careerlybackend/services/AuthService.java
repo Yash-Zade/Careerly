@@ -35,6 +35,7 @@ public class AuthService{
     private final UserService userService;
     private final WalletService walletService;
     private final ApplicantService applicantService;
+    private final EmailSenderService emailSenderService;
 
 
     public String[] login(String email, String password) {
@@ -42,6 +43,8 @@ public class AuthService{
         User user= (User) authentication.getPrincipal();
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
+        emailSenderService.sendEmail(user.getEmail(),"Login Notification",
+                "You have successfully logged in to Careerly");
         return new String[]{accessToken, refreshToken};
     }
 
@@ -58,6 +61,8 @@ public class AuthService{
         User savedUser = userRepository.save(mappedUser);
         applicantService.createNewApplicant(savedUser);
         walletService.createNewWallet(savedUser);
+        emailSenderService.sendEmail(savedUser.getEmail(),"Welcome to Careerly",
+                "Welcome to Careerly, we are excited to have you on board");
         return modelMapper.map(savedUser, UserDTO.class);
     }
 

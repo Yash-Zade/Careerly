@@ -25,6 +25,7 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final ModelMapper modelMapper;
     private final MentorRepository mentorRepository;
+    private final EmailSenderService emailSenderService;
 
     public Page<SessionDTO> getSessions(Integer pageOffset, Integer pageSize) {
         return sessionRepository.findAll(PageRequest.of(pageOffset, pageSize))
@@ -43,6 +44,9 @@ public class SessionService {
         session.setMentor(mentorRepository.findById(sessionDTO.getMentorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mentor not found with id: " + sessionDTO.getMentorId())));
         Session savedSession = sessionRepository.save(session);
+        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
+                "Session Created",
+                "Session created successfully");
         return modelMapper.map(savedSession, SessionDTO.class);
     }
 

@@ -23,6 +23,7 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final MentorRepository mentorRepository;
     private final ModelMapper modelMapper;
+    private final EmailSenderService emailSenderService;
 
 
     public MentorProfileDTO rateMentor(RatingDTO ratingDTO) {
@@ -41,6 +42,8 @@ public class RatingService {
         mentor.setAverageRating(newRating);
         mentor.getRatings().add(ratingObj);
         Mentor savedMentor = mentorRepository.save(mentor);
+        emailSenderService.sendEmail(mentor.getUser().getEmail(), "Rating",
+                "You have been rated by an applicant "+ratingDTO.getRatingValue()+" stars"+" with comment: "+ratingDTO.getComment());
         return modelMapper.map(savedMentor, MentorProfileDTO.class);
     }
 

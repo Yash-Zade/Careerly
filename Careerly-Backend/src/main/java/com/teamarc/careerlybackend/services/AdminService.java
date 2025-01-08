@@ -23,6 +23,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final EmailSenderService emailSenderService;
 
     public EmployerDTO onboardNewEmployer(Long userId, OnBoardNewEmployerDTO onBoardNewEmployerDTO) {
         User user=userService.getUserById(userId);
@@ -37,6 +38,8 @@ public class AdminService {
         user.getRoles().add(Role.EMPLOYER);
         userRepository.save(user);
         Employer savedEmployer = employerService.createNewEmployer(createEmployer);
+        emailSenderService.sendEmail(user.getEmail(),"Welcome to Careerly",
+                "You have been successfully onboarded as an employer");
         return modelMapper.map(savedEmployer, EmployerDTO.class);
     }
 
@@ -52,6 +55,8 @@ public class AdminService {
         user.getRoles().add(Role.MENTOR);
         userRepository.save(user);
         Mentor savedMentor = mentorService.createNewMentor(createMentor);
+        emailSenderService.sendEmail(user.getEmail(), "Welcome to Careerly",
+                "You have been successfully onboarded as a mentor");
         return modelMapper.map(savedMentor, MentorProfileDTO.class);
     }
 }

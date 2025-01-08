@@ -31,6 +31,7 @@ public class EmployerService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobRepository jobRepository;
     private final ApplicantService applicantService;
+    private final EmailSenderService emailSenderService;
 
     public Employer createNewEmployer(Employer employer) {
         return employerRepository.save(employer);
@@ -62,6 +63,9 @@ public class EmployerService {
         Job newJob = modelMapper.map(job, Job.class);
         newJob.setJobStatus(JobStatus.OPEN);
         Job savedJob = jobRepository.save(newJob);
+        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
+                "Job Created",
+                "Your job has been created successfully");
         return modelMapper.map(savedJob, JobDTO.class);
     }
 
@@ -88,6 +92,9 @@ public class EmployerService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         jobRepository.delete(job);
+        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
+                "Job Deleted",
+                "Your job has been deleted successfully");
         return modelMapper.map(job, JobDTO.class);
     }
 
@@ -134,17 +141,14 @@ public class EmployerService {
         return modelMapper.map(jobApplication, JobApplicationDTO.class);
     }
 
-    public JobApplicationDTO withdrawApplicant(Long applicationId) {
-        JobApplication jobApplication = jobApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Job Application not found"));
-        jobApplication.setApplicationStatus(ApplicationStatus.WITHDRAWN);
-        return modelMapper.map(jobApplicationRepository.save(jobApplication), JobApplicationDTO.class);
-    }
 
     public JobApplicationDTO changeApplicationStatus(Long applicationId, String status) {
         JobApplication jobApplication = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job Application not found"));
         jobApplication.setApplicationStatus(ApplicationStatus.valueOf(status));
+        emailSenderService.sendEmail(jobApplication.getApplicant().getUser().getEmail(),
+                "Application Status Changed",
+                "Your application status has been changed to: "+status);
         return modelMapper.map(jobApplicationRepository.save(jobApplication), JobApplicationDTO.class);
     }
 
@@ -174,6 +178,9 @@ public class EmployerService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         job.setJobStatus(JobStatus.CLOSED);
+        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
+                "Job Closed",
+                "Your job has been closed successfully");
         return modelMapper.map(jobRepository.save(job), JobDTO.class);
     }
 

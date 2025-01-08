@@ -19,6 +19,7 @@ public class WalletService {
 
     private final WalletRepository walletRepository;
     private final WalletTransactionService walletTransactionService;
+    private final EmailSenderService emailSenderService;
 
 
     @Transactional
@@ -34,6 +35,8 @@ public class WalletService {
                 .build();
 
         walletTransactionService.createNewWalletTransaction(walletTransaction);
+        emailSenderService.sendEmail(user.getEmail(), "Money Added to Wallet",
+                "Money of amount: " + amount + " has been added to your wallet. Transaction Id: " + transactionId);
         return walletRepository.save(wallet);
     }
 
@@ -50,6 +53,8 @@ public class WalletService {
                 .build();
 
         wallet.getTransactions().add(walletTransaction);
+        emailSenderService.sendEmail(user.getEmail(), "Money Deducted from Wallet",
+                "Money of amount: " + amount + " has been deducted from your wallet. Transaction Id: " + transactionId);
         return walletRepository.save(wallet);
 
     }

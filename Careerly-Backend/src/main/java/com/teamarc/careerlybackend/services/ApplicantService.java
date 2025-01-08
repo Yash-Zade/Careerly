@@ -34,6 +34,7 @@ public class ApplicantService {
     private final RatingService ratingService;
     private final SessionManagementService sessionManagementService;
     private final MentorService mentorService;
+    private final EmailSenderService emailSenderService;
 
     @Transactional
     public JobApplicationDTO applyJob(Long jobId, JobApplicationDTO jobApplicationDTO) {
@@ -51,6 +52,7 @@ public class ApplicantService {
         jobApplication.setApplicationStatus(ApplicationStatus.APPLIED);
         jobApplication.setJob(jobService.getJobById(jobApplicationDTO.getJobId()));
         JobApplication savedJobApplication = jobApplicationRepository.save(jobApplication);
+        emailSenderService.sendEmail(jobApplication.getApplicant().getUser().getEmail(), "Job Application", "Your application for job: "+job.getTitle()+" has been submitted successfully");
         return modelMapper.map(savedJobApplication, JobApplicationDTO.class);
     }
 
@@ -61,6 +63,7 @@ public class ApplicantService {
         jobApplication.setApplicationStatus(ApplicationStatus.WITHDRAWN);
         JobApplicationDTO jobApplicationDTO = modelMapper.map(jobApplication, JobApplicationDTO.class);
         jobApplicationRepository.delete(jobApplication);
+        emailSenderService.sendEmail(jobApplication.getApplicant().getUser().getEmail(), "Job Application", "Your application for job: "+jobApplication.getJob().getTitle()+" has been withdrawn successfully");
         return jobApplicationDTO;
     }
 
@@ -185,5 +188,9 @@ public class ApplicantService {
         ApplicantDTO applicant = getApplicantById(applicantId);
         User applicantUser = modelMapper.map(applicant.getUser(), User.class);
         return user.equals(applicantUser);
+    }
+
+    public SessionDTO cancelSession(Long sessionId) {
+        return sessionManagementService.cancelSession(sessionId);
     }
 }
