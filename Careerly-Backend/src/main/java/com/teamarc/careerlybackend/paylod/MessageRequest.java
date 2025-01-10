@@ -1,6 +1,5 @@
 package com.teamarc.careerlybackend.paylod;
 
-import com.teamarc.careerlybackend.entity.User;
 import lombok.*;
 
 @Data

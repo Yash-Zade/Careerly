@@ -1,18 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
-import com.teamarc.careerlybackend.dto.JobDTO;
-import com.teamarc.careerlybackend.entity.Applicant;
-import com.teamarc.careerlybackend.entity.Job;
-import com.teamarc.careerlybackend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

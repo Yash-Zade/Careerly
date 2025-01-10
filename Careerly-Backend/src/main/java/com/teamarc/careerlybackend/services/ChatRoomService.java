@@ -6,8 +6,8 @@ import com.teamarc.careerlybackend.entity.ChatRoom;
 import com.teamarc.careerlybackend.entity.Message;
 import com.teamarc.careerlybackend.entity.User;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
-import com.teamarc.careerlybackend.repository.RoomRepository;
 import com.teamarc.careerlybackend.repository.MessageRepository;
+import com.teamarc.careerlybackend.repository.RoomRepository;
 import com.teamarc.careerlybackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
 
     public ResponseEntity<?> createRoom(ChatRoomDTO chatRoomDTO) {
-        if(roomRepository.findById(chatRoomDTO.getRoomId()).isPresent()) {
+        if (roomRepository.findById(chatRoomDTO.getRoomId()).isPresent()) {
             return ResponseEntity.badRequest().body("Room already exists");
         }
 

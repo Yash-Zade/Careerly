@@ -1,6 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
 import com.teamarc.careerlybackend.dto.ApplicantDTO;
+import com.teamarc.careerlybackend.dto.EmailRequest;
 import com.teamarc.careerlybackend.dto.SessionDTO;
 import com.teamarc.careerlybackend.entity.Applicant;
 import com.teamarc.careerlybackend.entity.Session;
@@ -9,6 +10,7 @@ import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,79 +24,90 @@ public class SessionManagementService {
     private final ModelMapper modelMapper;
     private final RatingService ratingService;
     private final PaymentService paymentService;
-    private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
 
     public SessionDTO startSession(Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + sessionId));
-        if(session.getSessionStatus().name().equals("SCHEDULED")){
+        if (session.getSessionStatus().name().equals("SCHEDULED")) {
             session.setSessionStatus(SessionStatus.ONGOING);
             session.setSessionStartTime(LocalDateTime.now());
             Session savedSession = sessionRepository.save(session);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
-        throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        throw new RuntimeException("Session not found with Id: " + session.getSessionId());
     }
 
     public SessionDTO joinSession(Long sessionId, String otp) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + sessionId));
-        if(session.getSessionStatus().name().equals("SCHEDULED") && session.getOtp().equals(otp)){
+        if (session.getSessionStatus().name().equals("SCHEDULED") && session.getOtp().equals(otp)) {
             session.setSessionStatus(SessionStatus.ONGOING);
             session.setSessionStartTime(LocalDateTime.now());
             Session savedSession = sessionRepository.save(session);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
-        throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        throw new RuntimeException("Session not found with Id: " + session.getSessionId());
 
     }
 
     public SessionDTO endSessionByApplicant(Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + sessionId));
-        if(session.getSessionStatus().name().equals("ONGOING")){
+        if (session.getSessionStatus().name().equals("ONGOING")) {
             session.setSessionStatus(SessionStatus.COMPLETED);
             session.setSessionEndTime(LocalDateTime.now());
             Session savedSession = sessionRepository.save(session);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
-        throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        throw new RuntimeException("Session not found with Id: " + session.getSessionId());
     }
 
 
     public SessionDTO endSessionByMentor(Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + sessionId));
-        if(session.getSessionStatus().name().equals("SCHEDULED")){
+        if (session.getSessionStatus().name().equals("SCHEDULED")) {
             session.setSessionStatus(SessionStatus.COMPLETED);
             session.setSessionEndTime(LocalDateTime.now());
-            session.getMentor().setTotalSessions(session.getMentor().getTotalSessions()+1);
+            session.getMentor().setTotalSessions(session.getMentor().getTotalSessions() + 1);
             Session savedSession = sessionRepository.save(session);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
-        throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        throw new RuntimeException("Session not found with Id: " + session.getSessionId());
     }
 
 
-    public SessionDTO cancelSession(Long sessionId){
-        Session session= sessionRepository.findById(sessionId)
-                .orElseThrow(()-> new ResourceNotFoundException("Session not associated with Id: "+ sessionId));
+    public SessionDTO cancelSession(Long sessionId) {
+        Session session = sessionRepository.findById(sessionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Session not associated with Id: " + sessionId));
 
-        if(!(session.getSessionStatus().name().equals("APPLIED")|| session.getSessionStatus().name().equals("SCHEDULED"))){
-            throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        if (!(session.getSessionStatus().name().equals("APPLIED") || session.getSessionStatus().name().equals("SCHEDULED"))) {
+            throw new RuntimeException("Session not found with Id: " + session.getSessionId());
         }
         session.setSessionStatus(SessionStatus.CANCELLED);
         Session savedSession = sessionRepository.save(session);
         paymentService.refundPayment(savedSession);
-        emailSenderService.sendEmail(session.getApplicant().getUser().getEmail(),
-                "Session Cancelled",
-                "Your session has been cancelled by the mentor, You will be refunded the session fee");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(session.getApplicant().getUser().getEmail())
+                .subject("Session Cancelled")
+                .body("Your session has been cancelled by the mentor")
+                .buttonText("View Profile")
+                .buttonUrl("http://localhost:8080")
+                .build();
 
-        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
-                "Session Cancelled",
-                "You have cancelled the session with "+session.getApplicant().getUser().getName());
-        return modelMapper.map(session,SessionDTO.class);
+        EmailRequest emailRequest1 = EmailRequest.builder()
+                .toEmail(session.getMentor().getUser().getEmail())
+                .subject("Session Cancelled")
+                .body("Your session has been cancelled by the applicant")
+                .buttonText("View Profile")
+                .buttonUrl("http://localhost:8080")
+                .build();
+
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        amqpTemplate.convertAndSend("emailQueue", emailRequest1);
+        return modelMapper.map(session, SessionDTO.class);
 
     }
 
@@ -105,13 +118,27 @@ public class SessionManagementService {
         session.setApplicant(modelMapper.map(applicant, Applicant.class));
         Session savedSession = sessionRepository.save(session);
         paymentService.createNewPayment(session);
-        emailSenderService.sendEmail(applicant.getUser().getEmail(),
-                "Session Requested",
-                "Your session has been requested to the mentor, Please wait for the mentor to accept the session");
 
-        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
-                "Session Requested",
-                "You have a new session request from "+applicant.getUser().getName());
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(session.getMentor().getUser().getEmail())
+                .subject("Session Requested")
+                .body("You have a new session request from " + applicant.getUser().getName())
+                .buttonText("View Profile")
+                .buttonUrl("http://localhost:8080")
+                .build();
+
+        EmailRequest emailRequest1 = EmailRequest.builder()
+                .toEmail(applicant.getUser().getEmail())
+                .subject("Session Requested")
+                .body("Your session request has been sent to " + session.getMentor().getUser().getName())
+                .buttonText("View Profile")
+                .buttonUrl("http://localhost:8080")
+                .build();
+
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        amqpTemplate.convertAndSend("emailQueue", emailRequest1);
+
+
         return modelMapper.map(savedSession, SessionDTO.class);
     }
 
@@ -119,24 +146,30 @@ public class SessionManagementService {
     public SessionDTO acceptSession(Long sessionId) {
         Session session = sessionRepository.findById(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Session not found with id: " + sessionId));
-        if(session.getSessionStatus().name().equals("APPLIED")){
+        if (session.getSessionStatus().name().equals("APPLIED")) {
             session.setSessionStatus(SessionStatus.SCHEDULED);
             session.setOtp(generateRandomOtp());
             Session savedSession = sessionRepository.save(session);
             paymentService.processPayment(session);
             ratingService.creatNewRating(session);
-            emailSenderService.sendEmail(session.getApplicant().getUser().getEmail(),
-                    "Session Accepted",
-                    "Your session has been accepted by the mentor, Here is your otp to join the session: "+session.getOtp());
+
+            EmailRequest emailRequest = EmailRequest.builder()
+                    .toEmail(session.getApplicant().getUser().getEmail())
+                    .subject("Session Accepted")
+                    .body("Your session has been accepted by the mentor, OTP: " + session.getOtp())
+                    .buttonText("View Profile")
+                    .buttonUrl("http://localhost:8080")
+                    .build();
+            amqpTemplate.convertAndSend("emailQueue", emailRequest);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
-        throw new RuntimeException("Session not found with Id: "+ session.getSessionId());
+        throw new RuntimeException("Session not found with Id: " + session.getSessionId());
     }
 
     private String generateRandomOtp() {
         Random random = new Random();
         int otp = random.nextInt(10000);
-        return String.format("%04d",otp);
+        return String.format("%04d", otp);
     }
 
 

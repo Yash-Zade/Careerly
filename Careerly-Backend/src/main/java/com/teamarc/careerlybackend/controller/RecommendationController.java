@@ -1,8 +1,8 @@
 package com.teamarc.careerlybackend.controller;
 
-import com.teamarc.careerlybackend.services.JobRecommendationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/recommendations")

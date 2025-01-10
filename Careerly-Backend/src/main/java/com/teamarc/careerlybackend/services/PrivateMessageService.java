@@ -7,7 +7,6 @@ import com.teamarc.careerlybackend.repository.PrivateMessageRepository;
 import com.teamarc.careerlybackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +24,11 @@ public class PrivateMessageService {
 
     public ResponseEntity<?> sendMessage(PrivateMessageDTO privateMessageDTO) {
 
-        if(privateMessageDTO.getSender() == null) {
+        if (privateMessageDTO.getSender() == null) {
             return ResponseEntity.badRequest().body("Sender cannot be null");
         }
 
-        if(privateMessageDTO.getReceiver() == null) {
+        if (privateMessageDTO.getReceiver() == null) {
             return ResponseEntity.badRequest().body("Receiver cannot be null");
         }
 

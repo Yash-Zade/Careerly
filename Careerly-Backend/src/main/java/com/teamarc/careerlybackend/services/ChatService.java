@@ -32,7 +32,7 @@ public class ChatService {
 
     public Message sendMessage(MessageRequest request, Long roomId) {
         ChatRoom room = chatRoomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
-        User user = userRepository.findById(request.getSender()).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findById(request.getSender()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Message message = modelMapper.map(request, Message.class);
         message.setMessageContent(request.getMessageContent());
         message.setSender(user);

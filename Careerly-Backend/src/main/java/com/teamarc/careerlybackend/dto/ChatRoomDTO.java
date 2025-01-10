@@ -1,6 +1,5 @@
 package com.teamarc.careerlybackend.dto;
 
-import com.teamarc.careerlybackend.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

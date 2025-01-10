@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path="/mentors")
+@RequestMapping(path = "/mentors")
 @RequiredArgsConstructor
 public class MentorController {
 
@@ -22,88 +22,88 @@ public class MentorController {
 
     @GetMapping
     public ResponseEntity<Page<MentorDTO>> getAllMentors(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                      @RequestParam(defaultValue = "10", required = false) Integer pageSize){
+                                                         @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ResponseEntity.ok(mentorService.getALLMentors(pageOffset, pageSize));
     }
 
     @GetMapping(path = "/profile")
-    public ResponseEntity<MentorProfileDTO> getMentorProfile(){
+    public ResponseEntity<MentorProfileDTO> getMentorProfile() {
         return ResponseEntity.ok(mentorService.getMentorProfile());
     }
 
-    @GetMapping(path ="/profile/{id}")
-    public ResponseEntity<MentorDTO> getProfileById(@PathVariable Long id){
+    @GetMapping(path = "/profile/{id}")
+    public ResponseEntity<MentorDTO> getProfileById(@PathVariable Long id) {
         return ResponseEntity.ok(mentorService.getProfileById(id));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfProfile(#id)")
-    @PutMapping(path ="/profile/{id}")
-    public ResponseEntity<MentorProfileDTO> updateMentorProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
+    @PutMapping(path = "/profile/{id}")
+    public ResponseEntity<MentorProfileDTO> updateMentorProfile(@RequestBody Map<String, Object> object, @PathVariable Long id) {
         return ResponseEntity.ok(mentorService.updateProfile(id, object));
     }
 
-    @GetMapping(path ="/profile/rating")
-    public ResponseEntity<Double> getMentorsAverageRating(){
+    @GetMapping(path = "/profile/rating")
+    public ResponseEntity<Double> getMentorsAverageRating() {
         return ResponseEntity.ok(mentorService.getMentorsAverageRating());
     }
 
 
-    @GetMapping(path ="/sessions")
+    @GetMapping(path = "/sessions")
     public ResponseEntity<Page<SessionDTO>> getSessions(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                       @RequestParam(defaultValue = "10", required = false) Integer pageSize){
+                                                        @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ResponseEntity.ok(mentorService.getSessions(pageOffset, pageSize));
     }
 
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @GetMapping(path ="/sessions/{id}")
-    public ResponseEntity<SessionDTO> getSessionById(@PathVariable Long id){
+    @GetMapping(path = "/sessions/{id}")
+    public ResponseEntity<SessionDTO> getSessionById(@PathVariable Long id) {
         return ResponseEntity.ok(mentorService.getSessionById(id));
     }
 
-    @PostMapping(path ="/sessions")
-    public ResponseEntity<SessionDTO> createSession(@RequestBody SessionDTO session){
+    @PostMapping(path = "/sessions")
+    public ResponseEntity<SessionDTO> createSession(@RequestBody SessionDTO session) {
         return ResponseEntity.ok(mentorService.createSession(session));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @PutMapping(path ="/sessions/{id}")
-    public ResponseEntity<SessionDTO> updateSession(@RequestBody Map<String, Object> object, @PathVariable Long id){
+    @PutMapping(path = "/sessions/{id}")
+    public ResponseEntity<SessionDTO> updateSession(@RequestBody Map<String, Object> object, @PathVariable Long id) {
         return ResponseEntity.ok(mentorService.updateSession(id, object));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @PostMapping(path ="/sessions/{id}/accept")
-    public ResponseEntity<SessionDTO> acceptSession(@PathVariable Long id){
+    @PostMapping(path = "/sessions/{id}/accept")
+    public ResponseEntity<SessionDTO> acceptSession(@PathVariable Long id) {
         return ResponseEntity.ok(mentorService.acceptSession(id));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @PostMapping(path ="/sessions/{sessionId}/cancelled")
-    public ResponseEntity<SessionDTO> cancelSession(@PathVariable Long sessionId){
+    @PostMapping(path = "/sessions/{sessionId}/cancelled")
+    public ResponseEntity<SessionDTO> cancelSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.cancelSession(sessionId));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @PostMapping(path ="/sessions/{sessionId}/end")
-    public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId){
+    @PostMapping(path = "/sessions/{sessionId}/end")
+    public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.endSession(sessionId));
     }
 
-    @PostMapping(path ="/sessions/{sessionId}/start")
-    public ResponseEntity<SessionDTO> startSession(@PathVariable Long sessionId){
+    @PostMapping(path = "/sessions/{sessionId}/start")
+    public ResponseEntity<SessionDTO> startSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.startSession(sessionId));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
-    @GetMapping(path ="/sessions/{sessionId}/rating")
-    public ResponseEntity<RatingDTO> rateMentor(@PathVariable Long sessionId){
+    @GetMapping(path = "/sessions/{sessionId}/rating")
+    public ResponseEntity<RatingDTO> rateMentor(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.rateMentor(sessionId));
     }
 
-    @GetMapping(path ="/sessions/ratings")
+    @GetMapping(path = "/sessions/ratings")
     public ResponseEntity<Page<RatingDTO>> getRatings(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                     @RequestParam(defaultValue = "10", required = false) Integer pageSize){
+                                                      @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ResponseEntity.ok(mentorService.getRatings(pageOffset, pageSize));
     }
 

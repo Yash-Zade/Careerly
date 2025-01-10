@@ -1,5 +1,6 @@
 package com.teamarc.careerlybackend.services;
 
+import com.teamarc.careerlybackend.dto.EmailRequest;
 import com.teamarc.careerlybackend.entity.Session;
 import com.teamarc.careerlybackend.entity.User;
 import com.teamarc.careerlybackend.entity.Wallet;
@@ -8,6 +9,7 @@ import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,7 @@ public class WalletService {
 
     private final WalletRepository walletRepository;
     private final WalletTransactionService walletTransactionService;
-    private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
 
     @Transactional
@@ -35,8 +37,17 @@ public class WalletService {
                 .build();
 
         walletTransactionService.createNewWalletTransaction(walletTransaction);
-        emailSenderService.sendEmail(user.getEmail(), "Money Added to Wallet",
-                "Money of amount: " + amount + " has been added to your wallet. Transaction Id: " + transactionId);
+
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(user.getEmail())
+                .subject("Money Added to Wallet")
+                .body("Money of amount: " + amount + " has been added to your wallet. Transaction Id: " + transactionId)
+                .buttonText("View Wallet")
+                .buttonUrl("http://localhost:8080")
+                .build();
+
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+
         return walletRepository.save(wallet);
     }
 
@@ -53,8 +64,17 @@ public class WalletService {
                 .build();
 
         wallet.getTransactions().add(walletTransaction);
-        emailSenderService.sendEmail(user.getEmail(), "Money Deducted from Wallet",
-                "Money of amount: " + amount + " has been deducted from your wallet. Transaction Id: " + transactionId);
+
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(user.getEmail())
+                .subject("Money Deducted from Wallet")
+                .body("Money of amount: " + amount + " has been deducted from your wallet. Transaction Id: " + transactionId)
+                .buttonText("View Wallet")
+                .buttonUrl("http://localhost:8080")
+                .build();
+
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+
         return walletRepository.save(wallet);
 
     }
@@ -65,11 +85,11 @@ public class WalletService {
 
     public Wallet findWalletById(Long walletId) {
         return walletRepository.findById(walletId)
-                .orElseThrow(()-> new ResourceNotFoundException("Wallet not found with id: "+walletId));
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + walletId));
     }
 
     public Wallet createNewWallet(User user) {
-        Wallet wallet=Wallet.builder()
+        Wallet wallet = Wallet.builder()
                 .balance(BigDecimal.ZERO)
                 .user(user)
                 .transactions(null)
@@ -79,6 +99,6 @@ public class WalletService {
 
     public Wallet findByUser(User user) {
         return walletRepository.findByUser(user)
-                .orElseThrow(()-> new ResourceNotFoundException("Wallet not found with id: "+user.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + user.getId()));
     }
 }

@@ -1,6 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
 
+import com.teamarc.careerlybackend.dto.EmailRequest;
 import com.teamarc.careerlybackend.dto.SessionDTO;
 import com.teamarc.careerlybackend.entity.Session;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
@@ -9,9 +10,9 @@ import com.teamarc.careerlybackend.repository.SessionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final ModelMapper modelMapper;
     private final MentorRepository mentorRepository;
-    private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
     public Page<SessionDTO> getSessions(Integer pageOffset, Integer pageSize) {
         return sessionRepository.findAll(PageRequest.of(pageOffset, pageSize))
@@ -45,9 +46,16 @@ public class SessionService {
         session.setMentor(mentorRepository.findById(sessionDTO.getMentorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Mentor not found with id: " + sessionDTO.getMentorId())));
         Session savedSession = sessionRepository.save(session);
-        emailSenderService.sendEmail(session.getMentor().getUser().getEmail(),
-                "Session Created",
-                "Session created successfully");
+
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(savedSession.getMentor().getUser().getEmail())
+                .subject("New Session Created")
+                .body("A new session has been created with id: " + savedSession.getSessionId())
+                .buttonText("View Session")
+                .buttonUrl("http://localhost:8080" + savedSession.getSessionId())
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+
         return modelMapper.map(savedSession, SessionDTO.class);
     }
 
@@ -60,6 +68,15 @@ public class SessionService {
             ReflectionUtils.setField(field, session, value);
         });
         Session updatedSession = sessionRepository.save(session);
+
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(updatedSession.getMentor().getUser().getEmail())
+                .subject("Session Updated")
+                .body("Your session with id: " + updatedSession.getSessionId() + " has been updated")
+                .buttonText("View Session")
+                .buttonUrl("http://localhost:8080" + updatedSession.getSessionId())
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(updatedSession, SessionDTO.class);
     }
 

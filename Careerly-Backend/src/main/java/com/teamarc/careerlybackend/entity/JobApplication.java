@@ -2,12 +2,12 @@ package com.teamarc.careerlybackend.entity;
 
 import com.teamarc.careerlybackend.entity.enums.ApplicationStatus;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CurrentTimestamp;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Setter

@@ -28,7 +28,7 @@ public class Applicant {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "applicant",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "applicant", fetch = FetchType.LAZY)
     private List<JobApplication> jobApplications;
 
     private Boolean isFirstSession;

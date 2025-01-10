@@ -12,7 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="/admin")
+@RequestMapping(path = "/admin")
 @RequiredArgsConstructor
 @Secured("ROLE_ADMIN")
 public class AdminController {
@@ -20,14 +20,14 @@ public class AdminController {
     private final AdminService adminService;
 
 
-    @PostMapping(path="onBoardNewEmployer/{userId}")
-    public ResponseEntity<EmployerDTO> onBoardNewEmployer(@PathVariable Long userId, @RequestBody OnBoardNewEmployerDTO onBoardNewEmployerDTO){
-        return new ResponseEntity<>(adminService.onboardNewEmployer(userId,onBoardNewEmployerDTO), HttpStatus.CREATED);
+    @PostMapping(path = "onBoardNewEmployer/{userId}")
+    public ResponseEntity<EmployerDTO> onBoardNewEmployer(@PathVariable Long userId, @RequestBody OnBoardNewEmployerDTO onBoardNewEmployerDTO) {
+        return new ResponseEntity<>(adminService.onboardNewEmployer(userId, onBoardNewEmployerDTO), HttpStatus.CREATED);
     }
 
 
-    @PostMapping(path="onBoardNewMentor/{userId}")
-    public ResponseEntity<MentorProfileDTO> onBoardNewMentor(@PathVariable Long userId, @RequestBody OnboardNewMentorDTO onboardNewMentorDTO){
+    @PostMapping(path = "onBoardNewMentor/{userId}")
+    public ResponseEntity<MentorProfileDTO> onBoardNewMentor(@PathVariable Long userId, @RequestBody OnboardNewMentorDTO onboardNewMentorDTO) {
         return new ResponseEntity<>(adminService.onboardNewMentor(userId, onboardNewMentorDTO), HttpStatus.CREATED);
     }
 }

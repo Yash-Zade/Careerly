@@ -3,7 +3,6 @@ package com.teamarc.careerlybackend.controller;
 import com.teamarc.careerlybackend.dto.PrivateMessageDTO;
 import com.teamarc.careerlybackend.services.PrivateMessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

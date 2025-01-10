@@ -37,16 +37,16 @@ public class EmployerController {
     }
 
     @PreAuthorize("@employerService.isOwnerOfProfile(#id)")
-    @PutMapping(path="/profile/{id}")
-    public ResponseEntity<EmployerDTO> updateEmployerProfile(@RequestBody Map<String, Object> object, @PathVariable Long id){
+    @PutMapping(path = "/profile/{id}")
+    public ResponseEntity<EmployerDTO> updateEmployerProfile(@RequestBody Map<String, Object> object, @PathVariable Long id) {
         return ResponseEntity.ok(employerService.updateEmployerProfile(id, object));
     }
 
     @GetMapping("/job-applications")
-    public ResponseEntity<Page<JobApplicationDTO>> getAllApplications(@PathVariable Long jobId,@RequestParam(defaultValue = "0") Integer pageOffset,
+    public ResponseEntity<Page<JobApplicationDTO>> getAllApplications(@PathVariable Long jobId, @RequestParam(defaultValue = "0") Integer pageOffset,
                                                                       @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable) {
         PageRequest pageRequest = PageRequest.of(pageOffset, pageSize, Sort.by(Sort.Direction.DESC, "appliedDate", "applicationId"));
-        return ResponseEntity.ok(employerService.getAllApplications(jobId,pageRequest, pageable));
+        return ResponseEntity.ok(employerService.getAllApplications(jobId, pageRequest, pageable));
     }
 
 

@@ -2,7 +2,6 @@ package com.teamarc.careerlybackend.services;
 
 
 import com.teamarc.careerlybackend.dto.JobDTO;
-import com.teamarc.careerlybackend.entity.Job;
 import com.teamarc.careerlybackend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

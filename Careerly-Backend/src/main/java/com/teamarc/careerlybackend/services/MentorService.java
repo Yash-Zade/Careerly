@@ -43,7 +43,7 @@ public class MentorService {
     private Mentor getCurrentMentor() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return mentorRepository.findByUser(user)
-                .orElseThrow(()-> new ResourceNotFoundException("Applicant not associated with user with id: "+ user.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Applicant not associated with user with id: " + user.getId()));
 
     }
 

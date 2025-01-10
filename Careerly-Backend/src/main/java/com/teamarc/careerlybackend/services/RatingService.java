@@ -1,6 +1,7 @@
 package com.teamarc.careerlybackend.services;
 
 
+import com.teamarc.careerlybackend.dto.EmailRequest;
 import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.RatingDTO;
 import com.teamarc.careerlybackend.entity.Mentor;
@@ -12,6 +13,7 @@ import com.teamarc.careerlybackend.repository.MentorRepository;
 import com.teamarc.careerlybackend.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class RatingService {
     private final MentorRepository mentorRepository;
     private final ModelMapper modelMapper;
     private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
 
     public MentorProfileDTO rateMentor(RatingDTO ratingDTO) {
@@ -42,17 +45,23 @@ public class RatingService {
         mentor.setAverageRating(newRating);
         mentor.getRatings().add(ratingObj);
         Mentor savedMentor = mentorRepository.save(mentor);
-        emailSenderService.sendEmail(mentor.getUser().getEmail(), "Rating",
-                "You have been rated by an applicant "+ratingDTO.getRatingValue()+" stars"+" with comment: "+ratingDTO.getComment());
+
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(savedMentor.getUser().getEmail())
+                .subject("New Rating")
+                .body("You have received a new rating")
+                .buttonText("View")
+                .buttonUrl("https://your-site.com/ratings")
+                .build();
+
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+
         return modelMapper.map(savedMentor, MentorProfileDTO.class);
     }
 
 
-
-
-
     public void creatNewRating(Session session) {
-        Rating rating=Rating.builder()
+        Rating rating = Rating.builder()
                 .session(session)
                 .mentor(session.getMentor())
                 .applicant(session.getApplicant())

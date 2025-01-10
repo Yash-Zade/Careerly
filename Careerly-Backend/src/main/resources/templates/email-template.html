@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<!--    <style>-->
+<!--        @keyframes fadeIn {-->
+<!--            from { opacity: 0; transform: translateY(10px); }-->
+<!--            to { opacity: 1; transform: translateY(0); }-->
+<!--        }-->
+
+<!--        @keyframes shimmer {-->
+<!--            0% { background-position: -1000px 0; }-->
+<!--            100% { background-position: 1000px 0; }-->
+<!--        }-->
+
+<!--        @keyframes pulse {-->
+<!--            0% { transform: scale(1); opacity: 0.8; }-->
+<!--            50% { transform: scale(1.05); opacity: 1; }-->
+<!--            100% { transform: scale(1); opacity: 0.8; }-->
+<!--        }-->
+
+<!--        @keyframes float {-->
+<!--            0% { transform: translateY(0px) rotate(-10deg); }-->
+<!--            50% { transform: translateY(-5px) rotate(-8deg); }-->
+<!--            100% { transform: translateY(0px) rotate(-10deg); }-->
+<!--        }-->
+
+<!--        @keyframes borderGlow {-->
+<!--            0% { border-color: rgba(255, 255, 255, 0.1); }-->
+<!--            50% { border-color: rgba(255, 255, 255, 0.2); }-->
+<!--            100% { border-color: rgba(255, 255, 255, 0.1); }-->
+<!--        }-->
+<!--    </style>-->
+</head>
+<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif;">
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+    <tr>
+        <td align="center" style="padding: 20px;">
+            <!-- Main content table -->
+            <table border="0" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #1F2937; border-radius: 24px; overflow: hidden; border: 1px solid #374151; animation: fadeIn 0.8s ease-out;">
+                <!-- Funky Header -->
+                <tr>
+                    <td style="position: relative; padding: 48px 32px; background: linear-gradient(to right, #1F2937 0%, #1F2937 60%, #312E81 100%);">
+                        <!-- Animated decorative elements -->
+                        <div style="position: absolute; top: 20px; right: 40px; width: 40px; height: 4px; background: #6366F1; transform: rotate(-45deg); animation: pulse 3s infinite;"></div>
+                        <div style="position: absolute; top: 30px; right: 60px; width: 20px; height: 20px; background: #8B5CF6; border-radius: 50%; opacity: 0.5; animation: pulse 2s infinite;"></div>
+
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td>
+                                    <div style="font-size: 28px; font-weight: 700; background: linear-gradient(to right, #F9FAFB, #A5B4FC); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                                        CAREERLY
+                                        <span style="display: inline-block; margin-left: 4px; animation: float 3s ease-in-out infinite;">✦</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Main Content with Animated Glassmorphism -->
+                <tr>
+                    <td style="padding: clamp(16px, 4vw, 32px); background: rgba(31, 41, 55, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); animation: borderGlow 3s infinite;">
+                        <h1 style="margin: 0 0 24px; font-size: clamp(24px, 5vw, 36px); font-weight: 800; line-height: 1.2; animation: fadeIn 0.8s ease-out;">
+                            <span style="background: linear-gradient(to right, #F9FAFB, #A5B4FC); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;" th:text="${subject}">
+                                Shape Tomorrow's Career
+                            </span>
+                            <span style="display: inline-block; font-size: clamp(28px, 5vw, 40px); animation: float 3s ease-in-out infinite;">⚡</span>
+                        </h1>
+                        <p style="margin: 0 0 24px; color: #D1D5DB; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; border-left: 3px solid #6366F1; padding-left: 16px; animation: fadeIn 1s ease-out;">
+                            Discover your potential through AI-powered career guidance and mentorship
+                        </p>
+
+                        <!-- Special OTP Block with animated glassmorphism -->
+                        <div th:if="${content}" style="margin-bottom: 32px; padding: clamp(16px, 4vw, 24px); background: linear-gradient(135deg, rgba(44, 54, 69, 0.7), rgba(49, 46, 129, 0.7)); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 16px; text-align: center; position: relative; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); animation: fadeIn 1.2s ease-out, borderGlow 3s infinite;">
+                            <div style="position: absolute; top: -10px; right: -10px; width: 40px; height: 40px; background: #2DD4BF; border-radius: 50%; opacity: 0.1; animation: pulse 2s infinite;"></div>
+                            <p style="margin: 0; color: #D1D5DB; font-size: clamp(16px, 3vw, 18px); font-weight: 700;">
+                                <span th:text="${content}">Welcome to Careerly!</span>
+                            </p>
+                        </div>
+
+                        <!-- Animated CTA Button -->
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" th:if="${hasButton}">
+                            <tr>
+                                <td align="center">
+                                    <a href="#" style="display: inline-block; padding: clamp(12px, 3vw, 14px) clamp(20px, 4vw, 28px); background: linear-gradient(135deg, #4F46E5, #7C3AED); color: #FFFFFF; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: clamp(14px, 3vw, 16px); transform: skew(-3deg); transition: transform 0.3s ease, box-shadow 0.3s ease; animation: fadeIn 1.4s ease-out;" th:href="${buttonUrl}" th:text="${buttonText}" onmouseover="this.style.transform='skew(-3deg) scale(1.05)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.3)';" onmouseout="this.style.transform='skew(-3deg) scale(1)'; this.style.boxShadow='none';">
+                                        Get Started →
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Footer with subtle animations -->
+                <tr>
+                    <td style="background: linear-gradient(to right, #1a1f2a 0%, #1a1f2a 70%, #312E81 100%); padding: 32px; border-top: 1px solid #374151; animation: fadeIn 1.6s ease-out;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td align="center" style="padding-bottom: 24px;">
+                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #4F46E5); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(-3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(-3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">f</a>
+                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #7C3AED); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(3deg) scale(1)'">in</a>
+                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #2DD4BF); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(-3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(-3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">t</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <p style="margin: 0; color: #9CA3AF; font-size: 14px;">
+                                        © 2025 Team ARC
+                                        <span style="display: inline-block; animation: float 3s ease-in-out infinite;">⚡</span>
+                                        All rights to WAQF Board
+                                    </p>
+                                    <p style="margin: 8px 0 0; color: #6B7280; font-size: 14px;">
+                                        Nagpur, Maharashtra, India
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

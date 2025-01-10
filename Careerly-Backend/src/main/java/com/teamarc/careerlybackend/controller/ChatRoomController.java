@@ -4,7 +4,6 @@ package com.teamarc.careerlybackend.controller;
 import com.teamarc.careerlybackend.dto.ChatRoomDTO;
 import com.teamarc.careerlybackend.dto.MessageDTO;
 import com.teamarc.careerlybackend.entity.Message;
-import com.teamarc.careerlybackend.repository.RoomRepository;
 import com.teamarc.careerlybackend.services.ChatRoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path ="/api/chatroom")
+@RequestMapping(path = "/api/chatroom")
 public class ChatRoomController {
 
 

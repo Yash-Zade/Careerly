@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class RecommendationRequestDTO {
-        private Applicant applicant;
-        private Job job;
+    private Applicant applicant;
+    private Job job;
 
 }

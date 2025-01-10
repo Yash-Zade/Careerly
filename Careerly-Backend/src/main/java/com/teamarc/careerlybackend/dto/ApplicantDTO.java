@@ -1,7 +1,6 @@
 package com.teamarc.careerlybackend.dto;
 
 import com.teamarc.careerlybackend.entity.JobApplication;
-import jakarta.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

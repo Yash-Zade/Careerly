@@ -1,6 +1,5 @@
 package com.teamarc.careerlybackend.dto;
 
-import com.teamarc.careerlybackend.entity.User;
 import lombok.Data;
 
 @Data

@@ -5,7 +5,6 @@ import com.teamarc.careerlybackend.dto.PrivateMessageDTO;
 import com.teamarc.careerlybackend.entity.Message;
 import com.teamarc.careerlybackend.paylod.MessageRequest;
 import com.teamarc.careerlybackend.paylod.PrivateMessageRequest;
-
 import com.teamarc.careerlybackend.services.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ChatController {
 
     private final ChatService chatService;
-
 
 
     @MessageMapping("/sendMessage/{roomId}")

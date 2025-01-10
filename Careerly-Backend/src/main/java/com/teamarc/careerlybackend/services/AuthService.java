@@ -1,5 +1,6 @@
 package com.teamarc.careerlybackend.services;
 
+import com.teamarc.careerlybackend.dto.EmailRequest;
 import com.teamarc.careerlybackend.dto.SignupDTO;
 import com.teamarc.careerlybackend.dto.UserDTO;
 import com.teamarc.careerlybackend.entity.User;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +27,7 @@ import static com.teamarc.careerlybackend.entity.enums.Role.APPLICANT;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService{
+public class AuthService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -36,33 +38,46 @@ public class AuthService{
     private final WalletService walletService;
     private final ApplicantService applicantService;
     private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
 
     public String[] login(String email, String password) {
-        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
-        User user= (User) authentication.getPrincipal();
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        User user = (User) authentication.getPrincipal();
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-        emailSenderService.sendEmail(user.getEmail(),"Login Notification",
-                "You have successfully logged in to Careerly");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(user.getEmail())
+                .subject("Login Notification")
+                .body("You have successfully logged in to Careerly")
+                .buttonText("View Profile")
+                .buttonUrl("http://localhost:3000/profile")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return new String[]{accessToken, refreshToken};
     }
 
     @Transactional
     public UserDTO signup(SignupDTO signupDto) {
-        User user=userRepository.findByEmail(signupDto.getEmail())
+        User user = userRepository.findByEmail(signupDto.getEmail())
                 .orElse(null);
-        if(user != null)
-            throw new RuntimeConflictException("The user already exist with email id: "+signupDto.getEmail());
+        if (user != null)
+            throw new RuntimeConflictException("The user already exist with email id: " + signupDto.getEmail());
 
-        User mappedUser=modelMapper.map(signupDto,User.class);
+        User mappedUser = modelMapper.map(signupDto, User.class);
         mappedUser.setRoles(Set.of(APPLICANT));
         mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
         User savedUser = userRepository.save(mappedUser);
         applicantService.createNewApplicant(savedUser);
         walletService.createNewWallet(savedUser);
-        emailSenderService.sendEmail(savedUser.getEmail(),"Welcome to Careerly",
-                "Welcome to Careerly, we are excited to have you on board");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(savedUser.getEmail())
+                .subject("Welcome!")
+                .body("Welcome to Careerly!")
+                .buttonText("Get Started")
+                .buttonUrl("http://localhost:3000/welcome")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(savedUser, UserDTO.class);
     }
 

@@ -1,9 +1,6 @@
 package com.teamarc.careerlybackend.services;
 
-import com.teamarc.careerlybackend.dto.ApplicantDTO;
-import com.teamarc.careerlybackend.dto.EmployerDTO;
-import com.teamarc.careerlybackend.dto.JobApplicationDTO;
-import com.teamarc.careerlybackend.dto.JobDTO;
+import com.teamarc.careerlybackend.dto.*;
 import com.teamarc.careerlybackend.entity.*;
 import com.teamarc.careerlybackend.entity.enums.ApplicationStatus;
 import com.teamarc.careerlybackend.entity.enums.JobStatus;
@@ -13,6 +10,7 @@ import com.teamarc.careerlybackend.repository.JobApplicationRepository;
 import com.teamarc.careerlybackend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +30,7 @@ public class EmployerService {
     private final JobRepository jobRepository;
     private final ApplicantService applicantService;
     private final EmailSenderService emailSenderService;
+    private final AmqpTemplate amqpTemplate;
 
     public Employer createNewEmployer(Employer employer) {
         return employerRepository.save(employer);
@@ -45,7 +44,7 @@ public class EmployerService {
     private Employer getCurrentEmployer() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return employerRepository.findByUser(user)
-                .orElseThrow(()-> new ResourceNotFoundException("Applicant not associated with user with id: "+ user.getId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Applicant not associated with user with id: " + user.getId()));
 
     }
 
@@ -56,16 +55,21 @@ public class EmployerService {
 
     public Page<JobDTO> getAllJobs(PageRequest pageRequest) {
         return jobRepository.findAll(pageRequest)
-                .map(job-> modelMapper.map(job, JobDTO.class));
+                .map(job -> modelMapper.map(job, JobDTO.class));
     }
 
     public JobDTO createJob(JobDTO job) {
         Job newJob = modelMapper.map(job, Job.class);
         newJob.setJobStatus(JobStatus.OPEN);
         Job savedJob = jobRepository.save(newJob);
-        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
-                "Job Created",
-                "Your job has been created successfully");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(getCurrentEmployer().getUser().getEmail())
+                .subject("Job Created")
+                .body("Your job has been created successfully")
+                .buttonText("View")
+                .buttonUrl("https://localhost:8080")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(savedJob, JobDTO.class);
     }
 
@@ -92,9 +96,14 @@ public class EmployerService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         jobRepository.delete(job);
-        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
-                "Job Deleted",
-                "Your job has been deleted successfully");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(getCurrentEmployer().getUser().getEmail())
+                .subject("Job Deleted")
+                .body("Your job has been deleted successfully")
+                .buttonText("View")
+                .buttonUrl("https://localhost:8080")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(job, JobDTO.class);
     }
 
@@ -146,9 +155,14 @@ public class EmployerService {
         JobApplication jobApplication = jobApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job Application not found"));
         jobApplication.setApplicationStatus(ApplicationStatus.valueOf(status));
-        emailSenderService.sendEmail(jobApplication.getApplicant().getUser().getEmail(),
-                "Application Status Changed",
-                "Your application status has been changed to: "+status);
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(jobApplication.getApplicant().getUser().getEmail())
+                .subject("Application Status Changed")
+                .body("Your application status has been changed to: " + status)
+                .buttonText("View")
+                .buttonUrl("https://localhost:8080")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(jobApplicationRepository.save(jobApplication), JobApplicationDTO.class);
     }
 
@@ -178,9 +192,14 @@ public class EmployerService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         job.setJobStatus(JobStatus.CLOSED);
-        emailSenderService.sendEmail(getCurrentEmployer().getUser().getEmail(),
-                "Job Closed",
-                "Your job has been closed successfully");
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(getCurrentEmployer().getUser().getEmail())
+                .subject("Job Closed")
+                .body("Your job has been closed successfully")
+                .buttonText("View")
+                .buttonUrl("https://localhost:8080")
+                .build();
+        amqpTemplate.convertAndSend("emailQueue", emailRequest);
         return modelMapper.map(jobRepository.save(job), JobDTO.class);
     }
 

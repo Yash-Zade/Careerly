@@ -2,7 +2,8 @@ package com.teamarc.careerlybackend.entity;
 
 import com.teamarc.careerlybackend.entity.enums.Role;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +35,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_"+role.name()))
+        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toSet());
     }
 

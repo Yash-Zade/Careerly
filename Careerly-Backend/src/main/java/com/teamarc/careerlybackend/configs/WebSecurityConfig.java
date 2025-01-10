@@ -3,7 +3,6 @@ package com.teamarc.careerlybackend.configs;
 import com.teamarc.careerlybackend.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,7 +20,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
-    private static final String[] PUBLIC_ROUTES = {"/auth/**","/actuator/health","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
+    private static final String[] PUBLIC_ROUTES = {"/auth/**", "/actuator/health", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtAuthFilter jwtAuthFilter) throws Exception {

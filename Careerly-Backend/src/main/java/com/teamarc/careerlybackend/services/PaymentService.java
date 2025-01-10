@@ -26,8 +26,9 @@ public class PaymentService {
         payment.setPaymentStatus(status);
         paymentRepository.save(payment);
     }
+
     public Payment createNewPayment(Session session) {
-        Payment payment= Payment.builder()
+        Payment payment = Payment.builder()
                 .session(session)
                 .paymentStatus(PaymentStatus.PENDING)
                 .amount(session.getSessionFee())

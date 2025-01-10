@@ -43,8 +43,8 @@ public class WalletPaymentStrategy {
 
         BigDecimal mentorCut = payment.getAmount().multiply(BigDecimal.ONE.subtract(PLATFORM_COMMISSION));
         BigDecimal platformCut = payment.getAmount().subtract(mentorCut);
-        User admin= userService.loadUserByRole(Role.ADMIN);
-        walletService.addMoneyToWallet(admin, platformCut , generateTransactionId(), payment.getSession());
+        User admin = userService.loadUserByRole(Role.ADMIN);
+        walletService.addMoneyToWallet(admin, platformCut, generateTransactionId(), payment.getSession());
         walletService.addMoneyToWallet(mentor.getUser(), mentorCut, generateTransactionId(), payment.getSession());
         payment.setPaymentStatus(PaymentStatus.COMPLETED);
         paymentRepository.save(payment);
@@ -68,9 +68,9 @@ public class WalletPaymentStrategy {
         paymentRepository.save(payment);
     }
 
-public String generateTransactionId() {
+    public String generateTransactionId() {
         String transactionId = "TX" + UUID.randomUUID().toString().replace("-", "");
-        if(walletTransactionService.findByTransactionId(transactionId).isPresent()) {
+        if (walletTransactionService.findByTransactionId(transactionId).isPresent()) {
             return generateTransactionId();
         }
         return transactionId;
