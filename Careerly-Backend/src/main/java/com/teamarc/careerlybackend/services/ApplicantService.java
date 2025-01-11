@@ -7,6 +7,8 @@ import com.teamarc.careerlybackend.entity.enums.SessionStatus;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.ApplicantRepository;
 import com.teamarc.careerlybackend.repository.JobApplicationRepository;
+import com.teamarc.careerlybackend.repository.OnboardNewEmployerRepository;
+import com.teamarc.careerlybackend.repository.OnboardNewMentorRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -34,6 +36,9 @@ public class ApplicantService {
     private final RatingService ratingService;
     private final SessionManagementService sessionManagementService;
     private final AmqpTemplate amqpTemplate;
+    private final OnboardNewEmployerRepository onboardNewEmployerRepository;
+    private final OnboardNewMentorRepository onboardNewMentorRepository;
+    private final WalletService walletService;
 
 
     @Transactional
@@ -212,5 +217,18 @@ public class ApplicantService {
 
     public SessionDTO cancelSession(Long sessionId) {
         return sessionManagementService.cancelSession(sessionId);
+    }
+
+    public void requestEmployerOnboard(OnBoardNewEmployerDTO onboardNewEmployerDTO) {
+        onboardNewEmployerRepository.save(modelMapper.map(onboardNewEmployerDTO, OnboardNewEmployer.class));
+    }
+
+    public void requestMentorOnboard(OnboardNewMentorDTO onboardNewMentorDTO) {
+        onboardNewMentorRepository.save(modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class));
+    }
+
+    public WalletDTO getWallet() {
+        Wallet wallet = walletService.getWalletByUserId(getCurrentApplicant().getUser().getId());
+        return modelMapper.map(wallet, WalletDTO.class);
     }
 }

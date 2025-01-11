@@ -123,4 +123,21 @@ public class ApplicantController {
     public ResponseEntity<SessionDTO> cancleSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(applicantService.cancelSession(sessionId));
     }
+
+    @PostMapping(path = "/request/mentor")
+    public ResponseEntity<MentorProfileDTO> requestMentor(@RequestBody OnboardNewMentorDTO mentorRequestDTO) {
+        applicantService.requestMentorOnboard(mentorRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/request/employer")
+    public ResponseEntity<EmployerDTO> requestEmployer(@RequestBody OnBoardNewEmployerDTO employerRequestDTO) {
+        applicantService.requestEmployerOnboard(employerRequestDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/wallet")
+    public ResponseEntity<WalletDTO> getWallet() {
+        return ResponseEntity.ok(applicantService.getWallet());
+    }
 }

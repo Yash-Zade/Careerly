@@ -29,7 +29,7 @@ public class LoggingAspect {
     @AfterThrowing(pointcut = "execution(* com.teamarc.careerlybackend.services.*.*(..))", throwing = "error")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable error) {
         String methodName = joinPoint.getSignature().getName();
-        log.error("Exception in method: {}() with error: {}", methodName, error.getMessage(), error);
+        log.error("Exception in method: {}() with error: {}", methodName, error.getMessage());
     }
 
     @Around("execution(* com.teamarc.careerlybackend.services.*.*(..))")

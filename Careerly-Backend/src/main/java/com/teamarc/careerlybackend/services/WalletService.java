@@ -101,4 +101,9 @@ public class WalletService {
         return walletRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + user.getId()));
     }
+
+    public Wallet getWalletByUserId(long id) {
+        return walletRepository.findByUserId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Wallet not found with id: " + id));
+    }
 }
