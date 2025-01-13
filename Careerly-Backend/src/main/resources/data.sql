@@ -1,155 +1,196 @@
--- Users
-INSERT INTO app_user (name, email, password)
-VALUES ('Amit Sharma', 'amit.sharma@example.com', 'password1'),
-       ('Priya Singh', 'priya.singh@example.com', 'password2'),
-       ('Rahul Verma', 'rahul.verma@example.com', 'password3'),
-       ('Suresh Kumar', 'suresh.kumar@example.com', 'password4'),
-       ('Neha Gupta', 'neha.gupta@example.com', 'password5'),
-       ('Ravi Mehta', 'ravi.mehta@example.com', 'password6'),
-       ('Shweta Jain', 'shweta.jain@example.com', 'password7'),
-       ('Vikas Reddy', 'vikas.reddy@example.com', 'password8'),
-       ('Aarav Desai', 'aarav.desai@example.com', 'password9'),
-       ('Simran Kaur', 'simran.kaur@example.com', 'password10');
-
--- Applicants
-INSERT INTO applicant (resume, is_first_session, user_id)
-VALUES ('resume1.pdf', true, 1),
-       ('resume2.pdf', false, 2),
-       ('resume3.pdf', true, 3),
-       ('resume4.pdf', true, 4),
-       ('resume5.pdf', false, 5),
-       ('resume6.pdf', true, 6),
-       ('resume7.pdf', false, 7),
-       ('resume8.pdf', true, 8),
-       ('resume9.pdf', false, 9),
-       ('resume10.pdf', true, 10);
-
--- Employers
+-- INSERT INTO app_user (id, name, email, password)
+-- VALUES (1, 'Yash', 'yashmzade@gmail.com', '$2a$10$n4MXkakOYp4NDuuAarzP1u7Dn/1qZ8jfkf7kREciQd62y7lrWqm5K'),
+--        (2, 'Himanshu', 'dhandolehimanshu@gmail.com', '$2a$10$ALNwDYgBYCeDqf7sSBO3EOekYXgpGBKjOHcNUvcaHwNdqzL60KJp.'),
+--        (3, 'Arpit', 'apritsatpute@gmail.com', '$2a$10$HWAGM7DQWmNSweCF/MhlHupOZMo27kiz5538cuRIdWPnepW6Rs/oK'),
+--        (4, 'vikram', 'vikramshrivastav@gmail.com', '$2a$10$07RWAeqT16yt1lnrn94SLuy7ippuON.7D44dWGBwFpXAZEl598D4m'),
+--        (5, 'Applicant1', 'applicant1@example.com', '$2a$10$r6GSabpphhWfniBqYmoGmO1Ozw.8HIYuFyGnCWdCXcBe.EjjD0DZa'),
+--        (6, 'Applicant2', 'applicant2@example.com', '$2a$10$g8HXZOm1lNXlLgMtPqyvd.BQSPJFiRGhJ9AkbvZITzm7cIZ1spNoC'),
+--        (7, 'Applicant3', 'applicant3@example.com', '$2a$10$j2gCPWSYwuE6goe6HxnhWOiSLQSCgDL2LsvEYBAPmoQI6mE/QHwru'),
+--        (8, 'Applicant4', 'applicant4@example.com', '$2a$10$3KaIp3wSvYYPpaOAb7unROPhRbGe2SGCeiDtr5Ihap9xG4sjGAQge'),
+--        (9, 'Applicant5', 'applicant5@example.com', '$2a$10$nQMYXMZO4E.OYMhOmnTRLewguQPjMgy3bLU0X7O6ZBFefceXFr6.C'),
+--        (10, 'Employer1', 'employer1@example.com', '$2a$10$nIV1K7yc8fFj6fpBqzQ5zuO8ismM4odCkNs.jT44ORZjrcJfBJCU2'),
+--        (11, 'Employer2', 'employer2@example.com', '$2a$10$DjFUU7rwBya.411hBd3MAutSqyymyEaKPZ.Fkgwv0/yxkl53oDNMm'),
+--        (12, 'Employer3', 'employer3@example.com', '$2a$10$h5To8fn8VILem.jKAdcXEOm3/s7Uo.6Dycn3szVC/aohVRlSUx.Lq'),
+--        (13, 'Employer4', 'employer4@example.com', '$2a$10$trk/ZuO5800stYi3JRauo.vF2dN/zi6jpHIBR7HmVO9NalBTd/lcu'),
+--        (14, 'Employer5', 'employer5@example.com', '$2a$10$kJ7VmAz.JzxSso5gS1xIiePQqbqpN0EYJ0xcriaQPawPCuwAo5KGO'),
+--        (15, 'Mentor1', 'Mentor1@example.com', '$2a$10$f5w6BWykq.mY36f/zx0QdeSWjLXih0hHCwEFcF0625PDe9qmLXfD6'),
+--        (16, 'Mentor2', 'Mentor2@example.com', '$2a$10$t9l0lALpt7S0yXORk9TOuO54YUOd/ToqqPxYZxmTd.ZOnbAxShzzC'),
+--        (17, 'Mentor3', 'Mentor3@example.com', '$2a$10$Koibr3H2yIQn7Lnsq2.TV.pcoE8GQKUMzwiATnP9ufzrjZAITiapq'),
+--        (18, 'Mentor4', 'Mentor4@example.com', '$2a$10$pWkNvkX5uyQP6WhbgILYOuIu5AISgK6NgqvXkI25Y1gttNT.TWQQW'),
+--        (19, 'Mentor5', 'Mentor5@example.com', '$2a$10$wCmtZUHf/pAjQNzehBcMMeBawMdNyaooA5VWrKEd.cG.IDDFSNcyu');
+-- -- Employers
 INSERT INTO employer (company_name, company_website, user_id)
-VALUES ('Tech Solutions', 'https://techsolutions.com', 1),
-       ('Innovatech', 'https://innovatech.com', 2),
-       ('Softwares Inc.', 'https://softwaresinc.com', 3),
-       ('DataCorp', 'https://datacorp.com', 4),
-       ('AI Dynamics', 'https://aidynamics.com', 5),
-       ('NextGen Tech', 'https://nextgen.com', 6),
-       ('CloudWorks', 'https://cloudworks.com', 7),
-       ('ByteHub', 'https://bytehub.com', 8),
-       ('Quantum Labs', 'https://quantumlabs.com', 9),
-       ('GreenTech', 'https://greentech.com', 10);
+VALUES
+    ('Tech Innovators', 'https://techinnovators.com', 1),
+    ('Digital Solutions Ltd', 'https://digitalsolutions.com', 2),
+    ('Future Systems', 'https://futuresystems.com', 3),
+    ('Cloud Technologies', 'https://cloudtech.com', 4),
+    ('AI Research Labs', 'https://airesearch.com', 10),
+    ('Data Analytics Co', 'https://dataanalytics.com', 11),
+    ('Smart Solutions', 'https://smartsolutions.com', 12),
+    ('Quantum Computing', 'https://quantumcomp.com', 13),
+    ('Cyber Security Inc', 'https://cybersec.com', 14);
 
--- Jobs
-INSERT INTO job (title, description, location, job_status, company, employer_id)
-VALUES ('Software Engineer', 'Develop and maintain software applications.', 'Mumbai', 'OPEN', 'Tech Solutions', 1),
-       ('Data Analyst', 'Analyze data and generate reports.', 'Bangalore', 'CLOSED', 'Innovatech', 2),
-       ('Product Manager', 'Oversee product development lifecycle.', 'Chennai', 'OPEN', 'Softwares Inc.', 3),
-       ('Data Scientist', 'Design machine learning models.', 'Hyderabad', 'OPEN', 'DataCorp', 4),
-       ('AI Engineer', 'Develop AI-powered solutions.', 'Pune', 'CLOSED', 'AI Dynamics', 5),
-       ('Full Stack Developer', 'Build end-to-end applications.', 'Delhi', 'OPEN', 'NextGen Tech', 6),
-       ('Cloud Architect', 'Design cloud infrastructure solutions.', 'Noida', 'OPEN', 'CloudWorks', 7),
-       ('UX Designer', 'Design user interfaces for web applications.', 'Kolkata', 'CLOSED', 'ByteHub', 8),
-       ('Blockchain Developer', 'Develop blockchain-based applications.', 'Mumbai', 'OPEN', 'Quantum Labs', 9),
-       ('IoT Engineer', 'Build IoT systems for smart cities.', 'Bangalore', 'CLOSED', 'GreenTech', 10);
-
-INSERT INTO job_applications (job_id, applicant_id, application_status, applied_date)
-VALUES (1, 1, 'APPLIED', '2024-12-01 09:00:00'),
-       (2, 2, 'ACCEPTED', '2024-12-02 10:00:00'),
-       (3, 3, 'APPLIED', '2024-12-03 11:00:00'),
-       (4, 4, 'ACCEPTED', '2024-12-04 12:00:00'),
-       (5, 5, 'APPLIED', '2024-12-05 13:00:00'),
-       (6, 6, 'ACCEPTED', '2024-12-06 14:00:00'),
-       (7, 7, 'APPLIED', '2024-12-07 15:00:00'),
-       (8, 8, 'ACCEPTED', '2024-12-08 16:00:00'),
-       (9, 9, 'APPLIED', '2024-12-09 17:00:00'),
-       (10, 10, 'ACCEPTED', '2024-12-10 18:00:00');
-
--- Mentors
-INSERT INTO mentor (user_id, average_rating)
-VALUES (1, 4.5),
-       (2, 4.8),
-       (3, 4.2),
-       (4, 4.6),
-       (5, 4.7),
-       (6, 4.3),
-       (7, 4.4),
-       (8, 4.9),
-       (9, 4.5),
-       (10, 4.8);
-
--- Sessions
-INSERT INTO session (session_start_time, session_end_time, session_fee, otp, mentor_id, applicant_id, session_type,
-                     session_status, session_link)
-VALUES ('2024-12-01 09:00:00', '2024-12-01 10:00:00', null, '123456', 1, 1, 'FREE', 'COMPLETED',
-        'https://sessionlink1.com'),
-       ('2024-12-02 11:00:00', '2024-12-02 12:00:00', 750.00, '654321', 2, 2, 'PAID', 'SCHEDULED',
-        'https://sessionlink2.com'),
-       ('2024-12-03 13:00:00', '2024-12-03 14:00:00', 600.00, '654322', 3, 3, 'PAID', 'COMPLETED',
-        'https://sessionlink3.com'),
-       ('2024-12-04 14:00:00', '2024-12-04 15:00:00', 450.00, '654323', 4, 4, 'PAID', 'SCHEDULED',
-        'https://sessionlink4.com'),
-       ('2024-12-05 16:00:00', '2024-12-05 17:00:00', 800.00, '654324', 5, 5, 'PAID', 'COMPLETED',
-        'https://sessionlink5.com'),
-       ('2024-12-06 18:00:00', '2024-12-06 19:00:00', 700.00, '654325', 6, 6, 'PAID', 'SCHEDULED',
-        'https://sessionlink6.com'),
-       ('2024-12-07 10:00:00', '2024-12-07 11:00:00', 850.00, '654326', 7, 7, 'PAID', 'COMPLETED',
-        'https://sessionlink7.com'),
-       ('2024-12-08 11:00:00', '2024-12-08 12:00:00', 400.00, '654327', 8, 8, 'PAID', 'SCHEDULED',
-        'https://sessionlink8.com'),
-       ('2024-12-09 13:00:00', '2024-12-09 14:00:00', null, '654328', 9, 9, 'FREE', 'COMPLETED',
-        'https://sessionlink9.com'),
-       ('2024-12-10 15:00:00', '2024-12-10 16:00:00', null, '654329', 10, 10, 'FREE', 'SCHEDULED',
-        'https://sessionlink10.com');
-
--- Payments
-INSERT INTO payment (amount, payment_status, payment_time, session_id)
-VALUES (500.00, 'COMPLETED', '2024-12-01 12:00:00', 1),
-       (750.00, 'PENDING', '2024-12-02 13:00:00', 2),
-       (600.00, 'COMPLETED', '2024-12-03 14:00:00', 3),
-       (450.00, 'PENDING', '2024-12-04 15:00:00', 4),
-       (800.00, 'COMPLETED', '2024-12-05 16:00:00', 5),
-       (700.00, 'PENDING', '2024-12-06 17:00:00', 6),
-       (850.00, 'COMPLETED', '2024-12-07 18:00:00', 7),
-       (400.00, 'PENDING', '2024-12-08 19:00:00', 8),
-       (550.00, 'COMPLETED', '2024-12-09 20:00:00', 9),
-       (650.00, 'PENDING', '2024-12-10 21:00:00', 10);
-
--- Wallets
-INSERT INTO wallet (user_id, balance)
-VALUES (1, 1000.00),
-       (2, 1500.00),
-       (3, 2000.00),
-       (4, 2500.00),
-       (5, 3000.00),
-       (6, 3500.00),
-       (7, 4000.00),
-       (8, 4500.00),
-       (9, 5000.00),
-       (10, 5500.00);
-
-
--- Ratings Insert Statements
-INSERT INTO rating (rating_value, comment, session_id, mentor_id, applicant_id)
-VALUES (4.5, 'Great session, learned a lot!', 1, 1, 1),
-       (4.8, 'Very insightful discussion and guidance.', 2, 2, 2),
-       (4.3, 'The session was informative, but could have been more engaging.', 3, 3, 3),
-       (4.6, 'I got the answers I was looking for. Nice session.', 4, 4, 4),
-       (4.7, 'The mentor was very helpful and provided valuable insights.', 5, 5, 5),
-       (4.4, 'Good session but I expected more practical examples.', 6, 6, 6),
-       (4.9, 'Absolutely amazing! The mentor was excellent.', 7, 7, 7),
-       (4.5, 'The session met my expectations.', 8, 8, 8),
-       (4.8, 'Mentor provided clear explanations. Great learning experience.', 9, 9, 9),
-       (4.6, 'Overall good session, but more interaction would have been better.', 10, 10, 10);
-
--- Wallet Transactions
-INSERT INTO wallet_transaction (amount, transaction_type, session_session_id, transaction_id, wallet_id, time_stamp)
-VALUES (500.00, 'DEBIT', 1, 'TXN123', 1, '2024-12-01 12:00:00'),
-       (750.00, 'CREDIT', 2, 'TXN456', 2, '2024-12-02 13:00:00'),
-       (600.00, 'DEBIT', 3, 'TXN789', 3, '2024-12-03 14:00:00'),
-       (450.00, 'CREDIT', 4, 'TXN101', 4, '2024-12-04 15:00:00'),
-       (800.00, 'DEBIT', 5, 'TXN202', 5, '2024-12-05 16:00:00'),
-       (700.00, 'CREDIT', 6, 'TXN303', 6, '2024-12-06 17:00:00'),
-       (850.00, 'DEBIT', 7, 'TXN404', 7, '2024-12-07 18:00:00'),
-       (400.00, 'CREDIT', 8, 'TXN505', 8, '2024-12-08 19:00:00'),
-       (550.00, 'DEBIT', 9, 'TXN606', 9, '2024-12-09 20:00:00'),
-       (650.00, 'CREDIT', 10, 'TXN707', 10, '2024-12-10 21:00:00');
-
-
+-- -- Mentors
+-- INSERT INTO mentor (user_id, average_rating)
+-- VALUES
+--     (1, 4.8),
+--     (2, 4.9),
+--     (3, 4.7),
+--     (4, 4.6),
+--     (15, 4.8),
+--     (16, 4.7),
+--     (17, 4.9),
+--     (18, 4.8),
+--     (19, 4.7);
+--
+-- -- Jobs
+-- -- INSERT INTO job (title, description, location, job_status, company, employer_id)
+-- -- VALUES
+-- --     ('Senior Software Engineer', 'Lead development of cloud-native applications', 'Mumbai', 'OPEN', 'Tech Innovators', 1),
+-- --     ('Machine Learning Engineer', 'Build and deploy ML models', 'Bangalore', 'OPEN', 'Digital Solutions Ltd', 2),
+-- --     ('DevOps Specialist', 'Manage CI/CD pipelines and cloud infrastructure', 'Pune', 'CLOSED', 'Future Systems', 3),
+-- --     ('Frontend Developer', 'Create responsive web applications', 'Delhi', 'OPEN', 'Cloud Technologies', 4),
+-- --     ('Backend Engineer', 'Design and implement APIs', 'Hyderabad', 'OPEN', 'AI Research Labs', 10),
+-- --     ('Data Scientist', 'Analyze large datasets', 'Chennai', 'CLOSED', 'Data Analytics Co', 11),
+-- --     ('System Architect', 'Design scalable systems', 'Kolkata', 'OPEN', 'Smart Solutions', 12),
+-- --     ('Security Engineer', 'Implement security protocols', 'Noida', 'OPEN', 'Cyber Security Inc', 13),
+-- --     ('Full Stack Developer', 'Build end-to-end applications', 'Gurgaon', 'CLOSED', 'BlockChain Tech', 14),
+-- --     ('UI/UX Designer', 'Design user interfaces', 'Mumbai', 'OPEN', 'Tech Innovators', 1),
+-- --     ('Product Manager', 'Lead product development', 'Bangalore', 'OPEN', 'Digital Solutions Ltd', 2),
+-- --     ('QA Engineer', 'Ensure software quality', 'Pune', 'OPEN', 'Future Systems', 3),
+-- --     ('Technical Writer', 'Create documentation', 'Delhi', 'CLOSED', 'Cloud Technologies', 4),
+-- --     ('Mobile Developer', 'Build mobile applications', 'Hyderabad', 'OPEN', 'AI Research Labs', 10),
+-- --     ('Cloud Engineer', 'Manage cloud infrastructure', 'Chennai', 'OPEN', 'Data Analytics Co', 11),
+-- --     ('Network Administrator', 'Maintain network systems', 'Kolkata', 'OPEN', 'Smart Solutions', 12),
+-- --     ('Database Analyst', 'Analyze database performance', 'Noida', 'CLOSED', 'Cyber Security Inc', 13),
+-- --     ('Software Architect', 'Design software solutions', 'Gurgaon', 'OPEN', 'BlockChain Tech', 14);
+-- --
+--
+-- -- Job Applications
+-- -- INSERT INTO job_applications (job_id, applicant_id, application_status, applied_date)
+-- -- VALUES
+-- --     (1, 1, 'APPLIED', '2024-01-01 10:00:00'),
+-- --     (2, 2, 'ACCEPTED', '2024-01-02 11:00:00'),
+-- --     (3, 3, 'SHORTLISTED', '2024-01-03 12:00:00'),
+-- --     (4, 4, 'APPLIED', '2024-01-04 13:00:00'),
+-- --     (5, 5, 'ACCEPTED', '2024-01-05 14:00:00'),
+-- --     (6, 6, 'REJECTED', '2024-01-06 15:00:00'),
+-- --     (7, 7, 'APPLIED', '2024-01-07 16:00:00'),
+-- --     (8, 8, 'WITHDRAWN', '2024-01-08 17:00:00'),
+-- --     (9, 9, 'REJECTED', '2024-01-09 18:00:00'),
+-- --     (10, 10, 'APPLIED', '2024-01-10 19:00:00'),
+-- --     (11, 11, 'ACCEPTED', '2024-01-11 20:00:00'),
+-- --     (12, 12, 'REJECTED', '2024-01-12 21:00:00'),
+-- --     (13, 13, 'SHORTLISTED', '2024-01-13 22:00:00'),
+-- --     (14, 14, 'ACCEPTED', '2024-01-14 23:00:00'),
+-- --     (15, 15, 'REJECTED', '2024-01-15 00:00:00');
+-- --
+--
+-- -- Sessions
+-- INSERT INTO session (session_start_time, session_end_time, session_fee, otp, mentor_id, applicant_id, session_type, session_status, session_link)
+-- VALUES
+--     ('2024-01-01 10:00:00', '2024-01-01 11:00:00', null, '123456', 1, 1, 'FREE', 'COMPLETED', 'https://meet1.com'),
+--     ('2024-01-02 11:00:00', '2024-01-02 12:00:00', 1000.00, '234567', 2, 2, 'PAID', 'COMPLETED', 'https://meet2.com'),
+--     ('2024-01-03 12:00:00', '2024-01-03 13:00:00', 800.00, '345678', 3, 3, 'PAID', 'CANCELLED', 'https://meet3.com'),
+--     ('2024-01-04 13:00:00', '2024-01-04 14:00:00', null, '456789', 4, 4, 'FREE', 'COMPLETED', 'https://meet4.com'),
+--     ('2024-01-05 14:00:00', '2024-01-05 15:00:00', 1200.00, '567890', 15, 5, 'PAID', 'SCHEDULED', 'https://meet5.com'),
+--     ('2024-01-06 15:00:00', '2024-01-06 16:00:00', 900.00, '678901', 16, 6, 'PAID', 'COMPLETED', 'https://meet6.com'),
+--     ('2024-01-07 16:00:00', '2024-01-07 17:00:00', null, '789012', 17, 7, 'FREE', 'SCHEDULED', 'https://meet7.com'),
+--     ('2024-01-08 17:00:00', '2024-01-08 18:00:00', 1500.00, '890123', 18, 8, 'PAID', 'COMPLETED', 'https://meet8.com'),
+--     ('2024-01-09 18:00:00', '2024-01-09 19:00:00', 1100.00, '901234', 19, 9, 'PAID', 'CANCELLED', 'https://meet9.com'),
+--     ('2024-01-10 19:00:00', '2024-01-10 20:00:00', null, '012345', 1, 10, 'FREE', 'SCHEDULED', 'https://meet10.com');
+--
+-- -- Payments
+-- INSERT INTO payment (amount, payment_status, payment_time, session_id)
+-- VALUES
+--     (1000.00, 'COMPLETED', '2024-01-02 12:30:00', 2),
+--     (800.00, 'REFUNDED', '2024-01-03 13:30:00', 3),
+--     (1200.00, 'PENDING', '2024-01-05 15:30:00', 5),
+--     (900.00, 'COMPLETED', '2024-01-06 16:30:00', 6),
+--     (1500.00, 'COMPLETED', '2024-01-08 18:30:00', 8),
+--     (1100.00, 'REFUNDED', '2024-01-09 19:30:00', 9),
+--     (2000.00, 'PENDING', '2024-01-10 20:30:00', null),
+--     (1800.00, 'COMPLETED', '2024-01-11 21:30:00', null),
+--     (2500.00, 'PENDING', '2024-01-12 22:30:00', null),
+--     (1300.00, 'COMPLETED', '2024-01-13 23:30:00', null);
+--
+-- -- Wallets
+-- INSERT INTO wallet (user_id, balance)
+-- VALUES
+--     (1, 5000.00),
+--     (2, 3500.00),
+--     (3, 2800.00),
+--     (4, 4200.00),
+--     (5, 3000.00),
+--     (6, 2500.00),
+--     (7, 1800.00),
+--     (8, 4500.00),
+--     (9, 3200.00),
+--     (10, 2900.00),
+--     (11, 4000.00),
+--     (12, 3500.00),
+--     (13, 2700.00),
+--     (14, 4300.00),
+--     (15, 3100.00),
+--     (16, 2600.00),
+--     (17, 1900.00),
+--     (18, 4600.00),
+--     (19, 3300.00);
+--
+-- -- Ratings
+-- INSERT INTO rating (rating_value, comment, session_id, mentor_id, applicant_id)
+-- VALUES
+--     (4.8, 'Excellent session! The mentor was very knowledgeable and helpful.', 1, 1, 1),
+--     (4.9, 'Great insights and practical advice for my career growth.', 2, 2, 2),
+--     (4.7, 'Very thorough technical discussion and good recommendations.', 4, 4, 4),
+--     (4.8, 'Mentor was well-prepared and provided valuable feedback.', 6, 16, 6),
+--     (5.0, 'Outstanding session! Got all my doubts cleared.', 8, 18, 8);
+--
+-- -- Wallet Transactions
+-- INSERT INTO wallet_transaction (amount, transaction_type, session_session_id, transaction_id, wallet_id, time_stamp)
+-- VALUES
+--     (1000.00, 'CREDIT', 2, 'TXN001', 1, '2024-01-02 12:30:00'),
+--     (800.00, 'DEBIT', 3, 'TXN002', 2, '2024-01-03 13:30:00'),
+--     (1200.00, 'CREDIT', 5, 'TXN003', 3, '2024-01-05 15:30:00'),
+--     (900.00, 'DEBIT', 6, 'TXN004', 4, '2024-01-06 16:30:00'),
+--     (1500.00, 'CREDIT', 8, 'TXN005', 5, '2024-01-08 18:30:00'),
+--     (1100.00, 'DEBIT', 9, 'TXN006', 6, '2024-01-09 19:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN007', 7, '2024-01-10 20:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN008', 8, '2024-01-11 21:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN009', 9, '2024-01-12 22:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN010', 10, '2024-01-13 23:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN011', 11, '2024-01-14 00:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN012', 12, '2024-01-15 01:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN013', 13, '2024-01-16 02:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN014', 14, '2024-01-17 03:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN015', 15, '2024-01-18 04:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN016', 16, '2024-01-19 05:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN017', 17, '2024-01-20 06:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN018', 18, '2024-01-21 07:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN019', 19, '2024-01-22 08:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN020', 20, '2024-01-23 09:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN021', 21, '2024-01-24 10:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN022', 22, '2024-01-25 11:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN023', 23, '2024-01-26 12:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN024', 24, '2024-01-27 13:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN025', 25, '2024-01-28 14:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN026', 26, '2024-01-29 15:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN027', 27, '2024-01-30 16:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN028', 28, '2024-01-31 17:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN029', 29, '2024-02-01 18:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN030', 30, '2024-02-02 19:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN031', 31, '2024-02-03 20:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN032', 32, '2024-02-04 21:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN033', 33, '2024-02-05 22:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN034', 34, '2024-02-06 23:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN035', 35, '2024-02-07 00:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN036', 36, '2024-02-08 01:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN037', 37, '2024-02-09 02:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN038', 38, '2024-02-10 03:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN039', 39, '2024-02-11 04:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN040', 40, '2024-02-12 05:30:00'),
+--     (2500.00, 'CREDIT', null, 'TXN041', 41, '2024-02-13 06:30:00'),
+--     (1300.00, 'DEBIT', null, 'TXN042', 42, '2024-02-14 07:30:00'),
+--     (2000.00, 'CREDIT', null, 'TXN043', 43, '2024-02-15 08:30:00'),
+--     (1800.00, 'DEBIT', null, 'TXN044', 44, '2024-02-16 09:30:00');

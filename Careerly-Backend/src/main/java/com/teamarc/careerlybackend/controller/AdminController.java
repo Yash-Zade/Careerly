@@ -8,7 +8,6 @@ import com.teamarc.careerlybackend.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -73,6 +72,11 @@ public class AdminController {
                                                                       @RequestParam(defaultValue = "10", required = false) Integer pageSize ) {
         PageRequest pageRequest = PageRequest.of(pageOffset, pageSize);
         return new ResponseEntity<>(adminService.getMentorRequests(pageRequest), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/requests")
+    public ResponseEntity<Long> getTotalRequests() {
+        return new ResponseEntity<>(adminService.getTotalRequests(), HttpStatus.OK);
     }
 
 }

@@ -39,6 +39,7 @@ public class ApplicantService {
     private final OnboardNewEmployerRepository onboardNewEmployerRepository;
     private final OnboardNewMentorRepository onboardNewMentorRepository;
     private final WalletService walletService;
+    private final RabbitMQService rabbitMQService;
 
 
     @Transactional
@@ -86,8 +87,7 @@ public class ApplicantService {
                 .buttonUrl("http://localhost:8080/job-applications/" + jobApplication.getApplicationId())
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
-
+        rabbitMQService.sendEmail(emailRequest);
         return jobApplicationDTO;
     }
 
@@ -220,10 +220,26 @@ public class ApplicantService {
     }
 
     public void requestEmployerOnboard(OnBoardNewEmployerDTO onboardNewEmployerDTO) {
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(getCurrentApplicant().getUser().getEmail())
+                .subject("Employer Onboarding Request")
+                .body("Your request for employer onboarding has been submitted")
+                .buttonText("View")
+                .buttonUrl("https://your-site.com")
+                .build();
+        rabbitMQService.sendEmail(emailRequest);
         onboardNewEmployerRepository.save(modelMapper.map(onboardNewEmployerDTO, OnboardNewEmployer.class));
     }
 
     public void requestMentorOnboard(OnboardNewMentorDTO onboardNewMentorDTO) {
+        EmailRequest emailRequest = EmailRequest.builder()
+                .toEmail(getCurrentApplicant().getUser().getEmail())
+                .subject("Mentor Onboarding Request")
+                .body("Your request for mentor onboarding has been submitted")
+                .buttonText("View")
+                .buttonUrl("https://your-site.com")
+                .build();
+        rabbitMQService.sendEmail(emailRequest);
         onboardNewMentorRepository.save(modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class));
     }
 

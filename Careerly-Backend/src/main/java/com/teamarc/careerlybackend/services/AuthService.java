@@ -39,6 +39,7 @@ public class AuthService {
     private final ApplicantService applicantService;
     private final EmailSenderService emailSenderService;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
 
     public String[] login(String email, String password) {
@@ -53,7 +54,7 @@ public class AuthService {
                 .buttonText("View Profile")
                 .buttonUrl("http://localhost:3000/profile")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return new String[]{accessToken, refreshToken};
     }
 
@@ -77,7 +78,7 @@ public class AuthService {
                 .buttonText("Get Started")
                 .buttonUrl("http://localhost:3000/welcome")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(savedUser, UserDTO.class);
     }
 

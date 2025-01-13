@@ -25,6 +25,7 @@ public class SessionManagementService {
     private final RatingService ratingService;
     private final PaymentService paymentService;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
 
     public SessionDTO startSession(Long sessionId) {
@@ -105,8 +106,8 @@ public class SessionManagementService {
                 .buttonUrl("http://localhost:8080")
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
-        amqpTemplate.convertAndSend("emailQueue", emailRequest1);
+        rabbitMQService.sendEmail(emailRequest);
+        rabbitMQService.sendEmail(emailRequest1);
         return modelMapper.map(session, SessionDTO.class);
 
     }
@@ -135,8 +136,8 @@ public class SessionManagementService {
                 .buttonUrl("http://localhost:8080")
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
-        amqpTemplate.convertAndSend("emailQueue", emailRequest1);
+        rabbitMQService.sendEmail(emailRequest);
+        rabbitMQService.sendEmail(emailRequest1);
 
 
         return modelMapper.map(savedSession, SessionDTO.class);
@@ -160,7 +161,7 @@ public class SessionManagementService {
                     .buttonText("View Profile")
                     .buttonUrl("http://localhost:8080")
                     .build();
-            amqpTemplate.convertAndSend("emailQueue", emailRequest);
+            rabbitMQService.sendEmail(emailRequest);
             return modelMapper.map(savedSession, SessionDTO.class);
         }
         throw new RuntimeException("Session not found with Id: " + session.getSessionId());

@@ -22,6 +22,7 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final WalletTransactionService walletTransactionService;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
 
     @Transactional
@@ -46,7 +47,7 @@ public class WalletService {
                 .buttonUrl("http://localhost:8080")
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
 
         return walletRepository.save(wallet);
     }
@@ -73,7 +74,7 @@ public class WalletService {
                 .buttonUrl("http://localhost:8080")
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
 
         return walletRepository.save(wallet);
 

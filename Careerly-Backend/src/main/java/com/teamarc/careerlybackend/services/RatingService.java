@@ -27,6 +27,7 @@ public class RatingService {
     private final ModelMapper modelMapper;
     private final EmailSenderService emailSenderService;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
 
     public MentorProfileDTO rateMentor(RatingDTO ratingDTO) {
@@ -54,8 +55,7 @@ public class RatingService {
                 .buttonUrl("https://your-site.com/ratings")
                 .build();
 
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
-
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(savedMentor, MentorProfileDTO.class);
     }
 

@@ -30,6 +30,7 @@ public class AdminService {
     private final ApplicantService applicantService;
     private final OnboardNewEmployerRepository onboardNewEmployerRepository;
     private final OnboardNewMentorRepository onboardNewMentorRepository;
+    private final RabbitMQService rabbitMQService;
 
     @Transactional
     public EmployerDTO onboardNewEmployer(Long userId, OnBoardNewEmployerDTO onBoardNewEmployerDTO) {
@@ -52,7 +53,7 @@ public class AdminService {
                 .buttonText("View")
                 .buttonUrl("https://your-site.com")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         onboardNewEmployerRepository.delete(modelMapper.map(onBoardNewEmployerDTO, OnboardNewEmployer.class));
         return modelMapper.map(savedEmployer, EmployerDTO.class);
     }
@@ -79,9 +80,7 @@ public class AdminService {
                 .buttonText("View")
                 .buttonUrl("https://your-site.com")
                 .build();
-
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
-
+        rabbitMQService.sendEmail(emailRequest);
         onboardNewMentorRepository.delete(modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class));
 
         return modelMapper.map(savedMentor, MentorProfileDTO.class);
@@ -117,5 +116,9 @@ public class AdminService {
     public void rejectMentor(Long userId, OnboardNewMentorDTO onboardNewMentorDTO) {
         OnboardNewMentor onboardNewMentor = modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class);
         onboardNewMentorRepository.deleteById(onboardNewMentor.getId());
+    }
+
+    public Long getTotalRequests() {
+        return onboardNewEmployerRepository.count() + onboardNewMentorRepository.count();
     }
 }

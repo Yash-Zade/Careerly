@@ -28,6 +28,7 @@ public class SessionService {
     private final ModelMapper modelMapper;
     private final MentorRepository mentorRepository;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
     public Page<SessionDTO> getSessions(Integer pageOffset, Integer pageSize) {
         return sessionRepository.findAll(PageRequest.of(pageOffset, pageSize))
@@ -54,7 +55,7 @@ public class SessionService {
                 .buttonText("View Session")
                 .buttonUrl("http://localhost:8080" + savedSession.getSessionId())
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
 
         return modelMapper.map(savedSession, SessionDTO.class);
     }
@@ -76,7 +77,7 @@ public class SessionService {
                 .buttonText("View Session")
                 .buttonUrl("http://localhost:8080" + updatedSession.getSessionId())
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(updatedSession, SessionDTO.class);
     }
 

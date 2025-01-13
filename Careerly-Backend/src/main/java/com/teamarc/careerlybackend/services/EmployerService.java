@@ -31,6 +31,7 @@ public class EmployerService {
     private final ApplicantService applicantService;
     private final EmailSenderService emailSenderService;
     private final AmqpTemplate amqpTemplate;
+    private final RabbitMQService rabbitMQService;
 
     public Employer createNewEmployer(Employer employer) {
         return employerRepository.save(employer);
@@ -69,7 +70,7 @@ public class EmployerService {
                 .buttonText("View")
                 .buttonUrl("https://localhost:8080")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(savedJob, JobDTO.class);
     }
 
@@ -103,7 +104,7 @@ public class EmployerService {
                 .buttonText("View")
                 .buttonUrl("https://localhost:8080")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(job, JobDTO.class);
     }
 
@@ -162,7 +163,7 @@ public class EmployerService {
                 .buttonText("View")
                 .buttonUrl("https://localhost:8080")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(jobApplicationRepository.save(jobApplication), JobApplicationDTO.class);
     }
 
@@ -199,7 +200,7 @@ public class EmployerService {
                 .buttonText("View")
                 .buttonUrl("https://localhost:8080")
                 .build();
-        amqpTemplate.convertAndSend("emailQueue", emailRequest);
+        rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(jobRepository.save(job), JobDTO.class);
     }
 
