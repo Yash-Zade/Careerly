@@ -22,10 +22,6 @@ public class PaymentService {
         walletPaymentStrategy.processPayment(payment);
     }
 
-    public void updatePaymentStatus(Payment payment, PaymentStatus status) {
-        payment.setPaymentStatus(status);
-        paymentRepository.save(payment);
-    }
 
     public Payment createNewPayment(Session session) {
         Payment payment = Payment.builder()

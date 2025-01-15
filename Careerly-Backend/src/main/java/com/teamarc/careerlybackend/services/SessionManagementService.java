@@ -10,7 +10,6 @@ import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,6 @@ public class SessionManagementService {
     private final ModelMapper modelMapper;
     private final RatingService ratingService;
     private final PaymentService paymentService;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
 

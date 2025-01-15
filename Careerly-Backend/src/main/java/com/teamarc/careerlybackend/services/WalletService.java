@@ -9,7 +9,6 @@ import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ public class WalletService {
 
     private final WalletRepository walletRepository;
     private final WalletTransactionService walletTransactionService;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
 

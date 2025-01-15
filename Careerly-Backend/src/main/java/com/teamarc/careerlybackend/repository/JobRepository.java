@@ -1,6 +1,7 @@
 package com.teamarc.careerlybackend.repository;
 
 import com.teamarc.careerlybackend.entity.Job;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "OR LOWER(CAST(j.jobStatus AS string)) LIKE LOWER(CONCAT('%', :keyword, '%'))"
     )
     Page<Job> searchJobs(String keyword, PageRequest pageRequest, Pageable pageable);
+
+    Page<Job> findByPostedBy_EmployerId(Long employerId, PageRequest pageRequest, Pageable pageable);
 
 
 //    Page<Job> findRecommendedJobs(@Param("applicant") Applicant applicant, @Param("skillMatchWeight") double skillMatchWeight, @Param("locationWeight") double locationWeight, Pageable pageable);

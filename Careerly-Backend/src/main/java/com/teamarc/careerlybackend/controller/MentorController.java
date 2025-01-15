@@ -1,6 +1,5 @@
 package com.teamarc.careerlybackend.controller;
 
-import com.teamarc.careerlybackend.dto.MentorDTO;
 import com.teamarc.careerlybackend.dto.MentorProfileDTO;
 import com.teamarc.careerlybackend.dto.RatingDTO;
 import com.teamarc.careerlybackend.dto.SessionDTO;
@@ -8,6 +7,7 @@ import com.teamarc.careerlybackend.services.MentorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,24 +16,14 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/mentors")
 @RequiredArgsConstructor
+@Secured("ROLE_MENTOR")
 public class MentorController {
 
     private final MentorService mentorService;
 
-    @GetMapping
-    public ResponseEntity<Page<MentorDTO>> getAllMentors(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                         @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        return ResponseEntity.ok(mentorService.getALLMentors(pageOffset, pageSize));
-    }
-
     @GetMapping(path = "/profile")
     public ResponseEntity<MentorProfileDTO> getMentorProfile() {
         return ResponseEntity.ok(mentorService.getMentorProfile());
-    }
-
-    @GetMapping(path = "/profile/{id}")
-    public ResponseEntity<MentorDTO> getProfileById(@PathVariable Long id) {
-        return ResponseEntity.ok(mentorService.getProfileById(id));
     }
 
     @PreAuthorize("@mentorService.isOwnerOfProfile(#id)")
@@ -45,13 +35,6 @@ public class MentorController {
     @GetMapping(path = "/profile/rating")
     public ResponseEntity<Double> getMentorsAverageRating() {
         return ResponseEntity.ok(mentorService.getMentorsAverageRating());
-    }
-
-
-    @GetMapping(path = "/sessions")
-    public ResponseEntity<Page<SessionDTO>> getSessions(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                        @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        return ResponseEntity.ok(mentorService.getSessions(pageOffset, pageSize));
     }
 
 
@@ -78,24 +61,25 @@ public class MentorController {
         return ResponseEntity.ok(mentorService.acceptSession(id));
     }
 
-    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
+    @PreAuthorize("@mentorService.isOwnerOfSession(#sessionId)")
     @PostMapping(path = "/sessions/{sessionId}/cancelled")
     public ResponseEntity<SessionDTO> cancelSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.cancelSession(sessionId));
     }
 
-    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
+    @PreAuthorize("@mentorService.isOwnerOfSession(#sessionId)")
     @PostMapping(path = "/sessions/{sessionId}/end")
     public ResponseEntity<SessionDTO> endSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.endSession(sessionId));
     }
 
+    @PreAuthorize("@mentorService.isOwnerOfSession(#sessionId)")
     @PostMapping(path = "/sessions/{sessionId}/start")
     public ResponseEntity<SessionDTO> startSession(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.startSession(sessionId));
     }
 
-    @PreAuthorize("@mentorService.isOwnerOfSession(#id)")
+    @PreAuthorize("@mentorService.isOwnerOfSession(#sessionId)")
     @GetMapping(path = "/sessions/{sessionId}/rating")
     public ResponseEntity<RatingDTO> rateMentor(@PathVariable Long sessionId) {
         return ResponseEntity.ok(mentorService.rateMentor(sessionId));

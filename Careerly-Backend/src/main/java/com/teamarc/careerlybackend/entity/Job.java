@@ -3,6 +3,7 @@ package com.teamarc.careerlybackend.entity;
 import com.teamarc.careerlybackend.entity.enums.JobStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
@@ -38,6 +39,9 @@ public class Job {
     private JobStatus jobStatus;
 
     private String company;
+
+    @CreationTimestamp
+    private String postedDate;
 
     @Override
     public final boolean equals(Object o) {

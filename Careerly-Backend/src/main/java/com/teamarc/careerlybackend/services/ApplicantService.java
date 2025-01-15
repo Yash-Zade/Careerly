@@ -134,10 +134,6 @@ public class ApplicantService {
         return jobApplications.map(jobApplication -> modelMapper.map(jobApplication, JobApplicationDTO.class));
     }
 
-    public Page<JobDTO> searchJob(String keyword, PageRequest pageRequest, Pageable pageable) {
-        Page<Job> jobs = jobService.searchJobs(keyword, pageRequest, pageable).map((element) -> modelMapper.map(element, Job.class));
-        return jobs.map(job -> modelMapper.map(job, JobDTO.class));
-    }
 
     public void uploadResume(MultipartFile file) {
         Applicant applicant = getCurrentApplicant();
@@ -155,10 +151,6 @@ public class ApplicantService {
                 .orElseThrow(() -> new ResourceNotFoundException("Applicant not found with id: " + applicantId)), ApplicantDTO.class);
     }
 
-    public Page<JobDTO> getAllJobs(PageRequest pageRequest) {
-        Page<Job> jobs = jobService.getAllJobs(pageRequest).map((element) -> modelMapper.map(element, Job.class));
-        return jobs.map(job -> modelMapper.map(job, JobDTO.class));
-    }
 
     public SessionDTO requestSession(Long sessionId) {
         ApplicantDTO applicant = getApplicantProfile();

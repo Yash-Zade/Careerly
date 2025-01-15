@@ -11,7 +11,7 @@ public class EmailService {
 
     private final EmailSenderService emailSenderService;
 
-//    @RabbitListener(queues = "emailQueue")
+    @RabbitListener(queues = "emailQueue")
     public void listenToEmailQueue(EmailRequest emailRequest) {
         emailSenderService.sendEmail(
                 emailRequest.getToEmail(),

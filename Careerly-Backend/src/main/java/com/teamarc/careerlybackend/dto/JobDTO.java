@@ -24,4 +24,7 @@ public class JobDTO {
     private JobStatus jobStatus;
 
     private String company;
+
+    private String postedDate;
+
 }

@@ -35,14 +35,6 @@ public class ApplicantController {
         return ResponseEntity.ok(applicantService.updateProfile(id, object));
     }
 
-
-    @GetMapping(path = "/jobs")
-    public ResponseEntity<Page<JobDTO>> getAllJobs(@RequestParam(defaultValue = "0") Integer pageOffset,
-                                                   @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageOffset, pageSize, Sort.by(Sort.Direction.DESC, "postedDate", "jobId"));
-        return ResponseEntity.ok(applicantService.getAllJobs(pageRequest));
-    }
-
     @PostMapping(path = "/jobs/{jobId}/apply")
     public ResponseEntity<JobApplicationDTO> applyForJob(@PathVariable Long jobId, @RequestBody JobApplicationDTO jobApplication) {
         return ResponseEntity.ok(applicantService.applyJob(jobId, jobApplication));
@@ -52,15 +44,6 @@ public class ApplicantController {
     @PostMapping(path = "/jobs/{applicationId}/withdraw")
     public ResponseEntity<JobApplicationDTO> withdrawJobApplication(@PathVariable Long applicationId) {
         return ResponseEntity.ok(applicantService.withdrawApplication(applicationId));
-    }
-
-
-    @GetMapping(path = "/jobs/search")
-    public ResponseEntity<Page<JobDTO>> searchJob(@RequestParam String keyword,
-                                                  @RequestParam(defaultValue = "0") Integer pageOffset,
-                                                  @RequestParam(defaultValue = "10", required = false) Integer pageSize, Pageable pageable) {
-        PageRequest pageRequest = PageRequest.of(pageOffset, pageSize, Sort.by(Sort.Direction.DESC, "postedDate", "jobId"));
-        return ResponseEntity.ok(applicantService.searchJob(keyword, pageRequest, pageable));
     }
 
 
@@ -125,13 +108,13 @@ public class ApplicantController {
     }
 
     @PostMapping(path = "/request/mentor")
-    public ResponseEntity<MentorProfileDTO> requestMentor(@RequestBody OnboardNewMentorDTO mentorRequestDTO) {
+    public ResponseEntity<MentorProfileDTO> requestToBeAMentor(@RequestBody OnboardNewMentorDTO mentorRequestDTO) {
         applicantService.requestMentorOnboard(mentorRequestDTO);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(path = "/request/employer")
-    public ResponseEntity<EmployerDTO> requestEmployer(@RequestBody OnBoardNewEmployerDTO employerRequestDTO) {
+    public ResponseEntity<EmployerDTO> requestToBeAEmployer(@RequestBody OnBoardNewEmployerDTO employerRequestDTO) {
         applicantService.requestEmployerOnboard(employerRequestDTO);
         return ResponseEntity.ok().build();
     }

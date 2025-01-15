@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,8 +36,6 @@ public class AuthService {
     private final UserService userService;
     private final WalletService walletService;
     private final ApplicantService applicantService;
-    private final EmailSenderService emailSenderService;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
 

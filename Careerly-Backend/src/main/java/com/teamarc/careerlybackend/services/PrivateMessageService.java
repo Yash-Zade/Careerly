@@ -6,7 +6,6 @@ import com.teamarc.careerlybackend.entity.User;
 import com.teamarc.careerlybackend.repository.PrivateMessageRepository;
 import com.teamarc.careerlybackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class PrivateMessageService {
 
     private final UserRepository userRepository;
     private final PrivateMessageRepository privateMessageRepository;
-    private final ModelMapper modelMapper;
 
     public ResponseEntity<?> sendMessage(PrivateMessageDTO privateMessageDTO) {
 

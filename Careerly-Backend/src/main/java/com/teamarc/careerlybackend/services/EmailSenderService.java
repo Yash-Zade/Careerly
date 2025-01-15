@@ -44,7 +44,7 @@ public class EmailSenderService {
             javaMailSender.send(message);
             log.info("Email sent successfully to: {}", toEmail);
         } catch (Exception e) {
-            log.info("Cannot send email: " + e.getMessage());
+            log.error("Error sending email to: {}", toEmail, e);
         }
     }
 

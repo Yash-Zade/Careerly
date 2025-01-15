@@ -38,6 +38,7 @@ public class AuthController {
         Cookie cookie = new Cookie("refreshToken", tokens[1]);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+        response.setHeader("Authorization", tokens[0]);
         return ResponseEntity.ok(new LoginResponseDTO(tokens[0]));
     }
 

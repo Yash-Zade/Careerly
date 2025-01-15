@@ -16,8 +16,7 @@ public class LoggingAspect {
     @Before("execution(* com.teamarc.careerlybackend.services.*.*(..))")
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
-        Object[] args = joinPoint.getArgs();
-        log.info("Entering method: {}() with arguments: {}", methodName, Arrays.toString(args));
+        log.info("Entering method: {}() ", methodName);
     }
 
     @AfterReturning(pointcut = "execution(* com.teamarc.careerlybackend.services.*.*(..))", returning = "result")

@@ -10,7 +10,6 @@ import com.teamarc.careerlybackend.repository.SessionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.ReflectionUtils;
@@ -27,7 +26,6 @@ public class SessionService {
     private final SessionRepository sessionRepository;
     private final ModelMapper modelMapper;
     private final MentorRepository mentorRepository;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
     public Page<SessionDTO> getSessions(Integer pageOffset, Integer pageSize) {

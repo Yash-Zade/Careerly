@@ -4,55 +4,85 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-<!--    <style>-->
-<!--        @keyframes fadeIn {-->
-<!--            from { opacity: 0; transform: translateY(10px); }-->
-<!--            to { opacity: 1; transform: translateY(0); }-->
-<!--        }-->
+    <style>
+        /* Base Animations */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+        @keyframes shine {
+            0% { background-position: -100% 50%; }
+            100% { background-position: 200% 50%; }
+        }
 
-<!--        @keyframes shimmer {-->
-<!--            0% { background-position: -1000px 0; }-->
-<!--            100% { background-position: 1000px 0; }-->
-<!--        }-->
-
-<!--        @keyframes pulse {-->
-<!--            0% { transform: scale(1); opacity: 0.8; }-->
-<!--            50% { transform: scale(1.05); opacity: 1; }-->
-<!--            100% { transform: scale(1); opacity: 0.8; }-->
-<!--        }-->
-
-<!--        @keyframes float {-->
-<!--            0% { transform: translateY(0px) rotate(-10deg); }-->
-<!--            50% { transform: translateY(-5px) rotate(-8deg); }-->
-<!--            100% { transform: translateY(0px) rotate(-10deg); }-->
-<!--        }-->
-
-<!--        @keyframes borderGlow {-->
-<!--            0% { border-color: rgba(255, 255, 255, 0.1); }-->
-<!--            50% { border-color: rgba(255, 255, 255, 0.2); }-->
-<!--            100% { border-color: rgba(255, 255, 255, 0.1); }-->
-<!--        }-->
-<!--    </style>-->
+        /* Responsive styles */
+        @media screen and (max-width: 600px) {
+            .main-table {
+                width: 100% !important;
+                padding: 20px !important;
+            }
+            .content-table {
+                width: 100% !important;
+            }
+            .header-padding {
+                padding: 40px 20px !important;
+            }
+            .content-padding {
+                padding: 30px 20px !important;
+            }
+            .heading-text {
+                font-size: 32px !important;
+            }
+            .subheading-text {
+                font-size: 16px !important;
+            }
+            .social-icon {
+                width: 40px !important;
+                height: 40px !important;
+                line-height: 40px !important;
+                margin: 0 5px !important;
+            }
+            .button-padding {
+                padding: 14px 28px !important;
+                font-size: 16px !important;
+            }
+            .logo-text {
+                font-size: 28px !important;
+            }
+        }
+    </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif;">
-<table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+<body style="margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; background: #111827;">
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background: linear-gradient(135deg, #111827, #1F2937); animation: gradientMove 15s ease infinite;">
     <tr>
-        <td align="center" style="padding: 20px;">
+        <td align="center" style="padding: 40px 20px;" class="main-table">
             <!-- Main content table -->
-            <table border="0" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: #1F2937; border-radius: 24px; overflow: hidden; border: 1px solid #374151; animation: fadeIn 0.8s ease-out;">
-                <!-- Funky Header -->
+            <table border="0" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background: linear-gradient(145deg, #1F2937 0%, #1E1B4B 100%); border-radius: 32px; overflow: hidden; border: 1px solid #4F46E5; box-shadow: 0 0 40px rgba(79, 70, 229, 0.2);" class="content-table">
+                <!-- Header -->
                 <tr>
-                    <td style="position: relative; padding: 48px 32px; background: linear-gradient(to right, #1F2937 0%, #1F2937 60%, #312E81 100%);">
-                        <!-- Animated decorative elements -->
-                        <div style="position: absolute; top: 20px; right: 40px; width: 40px; height: 4px; background: #6366F1; transform: rotate(-45deg); animation: pulse 3s infinite;"></div>
-                        <div style="position: absolute; top: 30px; right: 60px; width: 20px; height: 20px; background: #8B5CF6; border-radius: 50%; opacity: 0.5; animation: pulse 2s infinite;"></div>
+                    <td style="position: relative; padding: 60px 40px; background: linear-gradient(135deg, #1F2937 0%, #312E81 100%);" class="header-padding">
+                        <!-- Decorative elements -->
+                        <div style="position: absolute; top: 20px; right: 40px; width: 60px; height: 60px; background: radial-gradient(circle, #6366F1 0%, transparent 70%); border-radius: 50%; animation: pulse 3s infinite;"></div>
+                        <div style="position: absolute; top: 40px; right: 80px; width: 40px; height: 40px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); border-radius: 50%; animation: pulse 2.5s infinite 0.5s;"></div>
+                        <div style="position: absolute; top: 30px; left: 40px; width: 30px; height: 30px; background: radial-gradient(circle, #2DD4BF 0%, transparent 70%); border-radius: 50%; animation: pulse 2s infinite 1s;"></div>
 
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
                                 <td>
-                                    <div style="font-size: 28px; font-weight: 700; background: linear-gradient(to right, #F9FAFB, #A5B4FC); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                                    <div style="font-size: 36px; font-weight: 800; background: linear-gradient(to right, #F9FAFB, #A5B4FC, #6366F1); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px rgba(99, 102, 241, 0.3); letter-spacing: -1px;" class="logo-text">
                                         CAREERLY
-                                        <span style="display: inline-block; margin-left: 4px; animation: float 3s ease-in-out infinite;">✦</span>
+                                        <span style="display: inline-block; margin-left: 8px; font-size: 40px; animation: float 3s ease-in-out infinite;">✨</span>
                                     </div>
                                 </td>
                             </tr>
@@ -60,32 +90,32 @@
                     </td>
                 </tr>
 
-                <!-- Main Content with Animated Glassmorphism -->
+                <!-- Main Content -->
                 <tr>
-                    <td style="padding: clamp(16px, 4vw, 32px); background: rgba(31, 41, 55, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); animation: borderGlow 3s infinite;">
-                        <h1 style="margin: 0 0 24px; font-size: clamp(24px, 5vw, 36px); font-weight: 800; line-height: 1.2; animation: fadeIn 0.8s ease-out;">
-                            <span style="background: linear-gradient(to right, #F9FAFB, #A5B4FC); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;" th:text="${subject}">
+                    <td style="padding: 40px;" class="content-padding">
+                        <h1 style="margin: 0 0 32px; font-size: 42px; font-weight: 800; line-height: 1.2; letter-spacing: -1px;" class="heading-text">
+                            <span style="background: linear-gradient(to right, #F9FAFB, #A5B4FC, #6366F1); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite;" th:text="${subject}">
                                 Shape Tomorrow's Career
                             </span>
-                            <span style="display: inline-block; font-size: clamp(28px, 5vw, 40px); animation: float 3s ease-in-out infinite;">⚡</span>
+                            <span style="display: inline-block; font-size: 44px; animation: float 3s ease-in-out infinite;">⚡</span>
                         </h1>
-                        <p style="margin: 0 0 24px; color: #D1D5DB; font-size: clamp(14px, 3vw, 16px); line-height: 1.6; border-left: 3px solid #6366F1; padding-left: 16px; animation: fadeIn 1s ease-out;">
+                        <p style="margin: 0 0 32px; color: #E5E7EB; font-size: 18px; line-height: 1.8; border-left: 4px solid #6366F1; padding-left: 20px; background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);" class="subheading-text">
                             Discover your potential through AI-powered career guidance and mentorship
                         </p>
 
-                        <!-- Special OTP Block with animated glassmorphism -->
-                        <div th:if="${content}" style="margin-bottom: 32px; padding: clamp(16px, 4vw, 24px); background: linear-gradient(135deg, rgba(44, 54, 69, 0.7), rgba(49, 46, 129, 0.7)); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 16px; text-align: center; position: relative; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); animation: fadeIn 1.2s ease-out, borderGlow 3s infinite;">
-                            <div style="position: absolute; top: -10px; right: -10px; width: 40px; height: 40px; background: #2DD4BF; border-radius: 50%; opacity: 0.1; animation: pulse 2s infinite;"></div>
-                            <p style="margin: 0; color: #D1D5DB; font-size: clamp(16px, 3vw, 18px); font-weight: 700;">
+                        <!-- OTP Block -->
+                        <div th:if="${content}" style="margin-bottom: 40px; padding: 32px; background: linear-gradient(135deg, rgba(49, 46, 129, 0.7), rgba(67, 56, 202, 0.7)); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 24px; text-align: center; position: relative; border: 1px solid rgba(99, 102, 241, 0.3); box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);">
+                            <div style="position: absolute; top: -15px; right: -15px; width: 60px; height: 60px; background: radial-gradient(circle, #2DD4BF 0%, transparent 70%); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                            <p style="margin: 0; color: #F9FAFB; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;" class="subheading-text">
                                 <span th:text="${content}">Welcome to Careerly!</span>
                             </p>
                         </div>
 
-                        <!-- Animated CTA Button -->
+                        <!-- CTA Button -->
                         <table border="0" cellpadding="0" cellspacing="0" width="100%" th:if="${hasButton}">
                             <tr>
                                 <td align="center">
-                                    <a href="#" style="display: inline-block; padding: clamp(12px, 3vw, 14px) clamp(20px, 4vw, 28px); background: linear-gradient(135deg, #4F46E5, #7C3AED); color: #FFFFFF; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: clamp(14px, 3vw, 16px); transform: skew(-3deg); transition: transform 0.3s ease, box-shadow 0.3s ease; animation: fadeIn 1.4s ease-out;" th:href="${buttonUrl}" th:text="${buttonText}" onmouseover="this.style.transform='skew(-3deg) scale(1.05)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.3)';" onmouseout="this.style.transform='skew(-3deg) scale(1)'; this.style.boxShadow='none';">
+                                    <a href="#" style="display: inline-block; padding: 16px 36px; background: linear-gradient(135deg, #4F46E5, #7C3AED, #6366F1); color: #FFFFFF; text-decoration: none; border-radius: 16px; font-weight: 700; font-size: 18px; letter-spacing: 0.5px; transform: translateY(0); transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);" class="button-padding" th:href="${buttonUrl}" th:text="${buttonText}" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 30px rgba(99, 102, 241, 0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(99, 102, 241, 0.3)';">
                                         Get Started →
                                     </a>
                                 </td>
@@ -94,25 +124,26 @@
                     </td>
                 </tr>
 
-                <!-- Footer with subtle animations -->
+                <!-- Footer -->
                 <tr>
-                    <td style="background: linear-gradient(to right, #1a1f2a 0%, #1a1f2a 70%, #312E81 100%); padding: 32px; border-top: 1px solid #374151; animation: fadeIn 1.6s ease-out;">
+                    <td style="background: linear-gradient(135deg, #1F2937 0%, #312E81 100%); padding: 40px;" class="content-padding">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tr>
-                                <td align="center" style="padding-bottom: 24px;">
-                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #4F46E5); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(-3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(-3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">f</a>
-                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #7C3AED); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(3deg) scale(1)'">in</a>
-                                    <a href="#" style="display: inline-block; width: 36px; height: 36px; background: linear-gradient(135deg, #2c3645, #2DD4BF); color: #D1D5DB; text-decoration: none; margin: 0 8px; line-height: 36px; font-size: 14px; border-radius: 12px; transform: rotate(-3deg); transition: transform 0.3s ease;" onmouseover="this.style.transform='rotate(-3deg) scale(1.1)'" onmouseout="this.style.transform='rotate(-3deg) scale(1)'">t</a>
+                                <td align="center" style="padding-bottom: 32px;">
+                                    <!-- Social Icons -->
+                                    <a href="#" style="display: inline-block; width: 44px; height: 44px; background: linear-gradient(135deg, #4F46E5, #6366F1); color: #F9FAFB; text-decoration: none; margin: 0 10px; line-height: 44px; font-size: 16px; border-radius: 14px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);" class="social-icon" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.2)';">f</a>
+                                    <a href="#" style="display: inline-block; width: 44px; height: 44px; background: linear-gradient(135deg, #6366F1, #8B5CF6); color: #F9FAFB; text-decoration: none; margin: 0 10px; line-height: 44px; font-size: 16px; border-radius: 14px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);" class="social-icon" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.2)';">in</a>
+                                    <a href="#" style="display: inline-block; width: 44px; height: 44px; background: linear-gradient(135deg, #8B5CF6, #2DD4BF); color: #F9FAFB; text-decoration: none; margin: 0 10px; line-height: 44px; font-size: 16px; border-radius: 14px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);" class="social-icon" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(99, 102, 241, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(99, 102, 241, 0.2)';">t</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td align="center">
-                                    <p style="margin: 0; color: #9CA3AF; font-size: 14px;">
+                                    <p style="margin: 0; color: #D1D5DB; font-size: 16px; font-weight: 500;">
                                         © 2025 Team ARC
                                         <span style="display: inline-block; animation: float 3s ease-in-out infinite;">⚡</span>
                                         All rights to WAQF Board
                                     </p>
-                                    <p style="margin: 8px 0 0; color: #6B7280; font-size: 14px;">
+                                    <p style="margin: 12px 0 0; color: #9CA3AF; font-size: 14px;">
                                         Nagpur, Maharashtra, India
                                     </p>
                                 </td>

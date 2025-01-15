@@ -10,7 +10,6 @@ import com.teamarc.careerlybackend.repository.JobApplicationRepository;
 import com.teamarc.careerlybackend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +28,6 @@ public class EmployerService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobRepository jobRepository;
     private final ApplicantService applicantService;
-    private final EmailSenderService emailSenderService;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
     public Employer createNewEmployer(Employer employer) {
@@ -54,10 +51,6 @@ public class EmployerService {
                 .map(jobApplication -> modelMapper.map(jobApplication, JobApplicationDTO.class));
     }
 
-    public Page<JobDTO> getAllJobs(PageRequest pageRequest) {
-        return jobRepository.findAll(pageRequest)
-                .map(job -> modelMapper.map(job, JobDTO.class));
-    }
 
     public JobDTO createJob(JobDTO job) {
         Job newJob = modelMapper.map(job, Job.class);
@@ -112,11 +105,6 @@ public class EmployerService {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
         return modelMapper.map(job, JobDTO.class);
-    }
-
-    public Page<JobDTO> searchJobs(String keyword, PageRequest pageRequest, Pageable pageable) {
-        Page<Job> jobs = jobRepository.searchJobs(keyword, pageRequest, pageable);
-        return jobs.map(job -> modelMapper.map(job, JobDTO.class));
     }
 
     public Page<JobDTO> searchApplications(String keyword, PageRequest pageRequest, Pageable pageable) {
@@ -218,7 +206,7 @@ public class EmployerService {
         return user.equals(jobUser);
     }
 
-    public boolean isOwnerOfApplication(Long applicationId) {
+    public boolean isOwnerOfJobByApplicationId(Long applicationId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         JobApplication jobApplication = getApplicationById(applicationId);
         EmployerDTO employerDTO = getEmployerProfileById(jobApplication.getJob().getPostedBy().getEmployerId());
@@ -238,4 +226,8 @@ public class EmployerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Job Application not found with id: " + applicationId));
     }
 
+    public Page<JobDTO> getAllJobsOfEmployer(Long employerId, PageRequest pageRequest, Pageable pageable) {
+        return jobRepository.findByPostedBy_EmployerId(employerId, pageRequest, pageable)
+                .map(job -> modelMapper.map(job, JobDTO.class));
+    }
 }

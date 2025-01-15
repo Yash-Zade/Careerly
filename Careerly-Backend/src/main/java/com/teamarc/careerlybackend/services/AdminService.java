@@ -10,10 +10,8 @@ import com.teamarc.careerlybackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,9 +23,6 @@ public class AdminService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final UserService userService;
-    private final EmailSenderService emailSenderService;
-    private final AmqpTemplate amqpTemplate;
-    private final ApplicantService applicantService;
     private final OnboardNewEmployerRepository onboardNewEmployerRepository;
     private final OnboardNewMentorRepository onboardNewMentorRepository;
     private final RabbitMQService rabbitMQService;

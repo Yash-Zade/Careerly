@@ -13,7 +13,6 @@ import com.teamarc.careerlybackend.repository.MentorRepository;
 import com.teamarc.careerlybackend.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ public class RatingService {
     private final RatingRepository ratingRepository;
     private final MentorRepository mentorRepository;
     private final ModelMapper modelMapper;
-    private final EmailSenderService emailSenderService;
-    private final AmqpTemplate amqpTemplate;
     private final RabbitMQService rabbitMQService;
 
 
