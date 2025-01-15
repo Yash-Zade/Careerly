@@ -9,3 +9,4 @@ spring:
       simple:
         concurrency: 1
         max-concurrency: 10
+

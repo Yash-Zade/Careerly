@@ -18,4 +18,6 @@ public class MentorDTO {
     private Double averageRating;
 
     private String bio;
+
+    private Integer experience;
 }

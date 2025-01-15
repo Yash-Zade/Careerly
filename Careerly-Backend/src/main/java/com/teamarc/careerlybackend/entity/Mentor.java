@@ -35,5 +35,7 @@ public class Mentor {
     private String bio;
 
     private Long totalSessions;
+
+    private Integer experience;
 }
 

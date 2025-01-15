@@ -63,6 +63,7 @@ public class AdminService {
         Mentor createMentor = Mentor.builder()
                 .expertise(onboardNewMentorDTO.getExpertise())
                 .user(user)
+                .experience(onboardNewMentorDTO.getExperience())
                 .build();
         user.getRoles().add(Role.MENTOR);
         userRepository.save(user);

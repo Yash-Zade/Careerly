@@ -22,4 +22,6 @@ public class MentorProfileDTO {
     private Long totalSessions;
 
     private String bio;
+
+    private Integer experience;
 }
