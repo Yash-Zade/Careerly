@@ -13,6 +13,7 @@ import com.teamarc.careerlybackend.repository.MentorRepository;
 import com.teamarc.careerlybackend.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RatingService {
 
+    @Value("${base.url}")
+    private String baseUrl;
+
     private final RatingRepository ratingRepository;
     private final MentorRepository mentorRepository;
     private final ModelMapper modelMapper;
     private final RabbitMQService rabbitMQService;
-
 
     public MentorProfileDTO rateMentor(RatingDTO ratingDTO) {
         Mentor mentor = ratingDTO.getSession().getMentor();
@@ -49,7 +52,7 @@ public class RatingService {
                 .subject("New Rating")
                 .body("You have received a new rating")
                 .buttonText("View")
-                .buttonUrl("https://your-site.com/ratings")
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);

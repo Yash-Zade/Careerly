@@ -10,6 +10,7 @@ import com.teamarc.careerlybackend.repository.SessionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.ReflectionUtils;
@@ -22,6 +23,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SessionService {
 
+    @Value("${base.url}")
+    private String baseUrl;
 
     private final SessionRepository sessionRepository;
     private final ModelMapper modelMapper;
@@ -51,7 +54,7 @@ public class SessionService {
                 .subject("New Session Created")
                 .body("A new session has been created with id: " + savedSession.getSessionId())
                 .buttonText("View Session")
-                .buttonUrl("http://localhost:8080" + savedSession.getSessionId())
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
 
@@ -73,7 +76,7 @@ public class SessionService {
                 .subject("Session Updated")
                 .body("Your session with id: " + updatedSession.getSessionId() + " has been updated")
                 .buttonText("View Session")
-                .buttonUrl("http://localhost:8080" + updatedSession.getSessionId())
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(updatedSession, SessionDTO.class);

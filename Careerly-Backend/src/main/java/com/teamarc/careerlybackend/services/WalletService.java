@@ -9,6 +9,7 @@ import com.teamarc.careerlybackend.entity.enums.TransactionType;
 import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,10 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class WalletService {
+
+    @Value("${base.url}")
+    private String baseUrl;
+
 
     private final WalletRepository walletRepository;
     private final WalletTransactionService walletTransactionService;
@@ -42,7 +47,7 @@ public class WalletService {
                 .subject("Money Added to Wallet")
                 .body("Money of amount: " + amount + " has been added to your wallet. Transaction Id: " + transactionId)
                 .buttonText("View Wallet")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/applicant/wallet")
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);
@@ -69,7 +74,7 @@ public class WalletService {
                 .subject("Money Deducted from Wallet")
                 .body("Money of amount: " + amount + " has been deducted from your wallet. Transaction Id: " + transactionId)
                 .buttonText("View Wallet")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/applicant/wallet")
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);

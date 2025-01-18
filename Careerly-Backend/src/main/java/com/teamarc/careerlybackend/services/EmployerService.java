@@ -10,6 +10,7 @@ import com.teamarc.careerlybackend.repository.JobApplicationRepository;
 import com.teamarc.careerlybackend.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmployerService {
+
+    @Value("${base.url}")
+    private String baseUrl;
+
     private final EmployerRepository employerRepository;
     private final ModelMapper modelMapper;
     private final JobApplicationRepository jobApplicationRepository;
@@ -61,7 +66,7 @@ public class EmployerService {
                 .subject("Job Created")
                 .body("Your job has been created successfully")
                 .buttonText("View")
-                .buttonUrl("https://localhost:8080")
+                .buttonUrl(baseUrl+"/employers/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(savedJob, JobDTO.class);
@@ -95,7 +100,7 @@ public class EmployerService {
                 .subject("Job Deleted")
                 .body("Your job has been deleted successfully")
                 .buttonText("View")
-                .buttonUrl("https://localhost:8080")
+                .buttonUrl(baseUrl+"/employers/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(job, JobDTO.class);
@@ -149,7 +154,7 @@ public class EmployerService {
                 .subject("Application Status Changed")
                 .body("Your application status has been changed to: " + status)
                 .buttonText("View")
-                .buttonUrl("https://localhost:8080")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(jobApplicationRepository.save(jobApplication), JobApplicationDTO.class);
@@ -186,7 +191,7 @@ public class EmployerService {
                 .subject("Job Closed")
                 .body("Your job has been closed successfully")
                 .buttonText("View")
-                .buttonUrl("https://localhost:8080")
+                .buttonUrl(baseUrl+"/employers/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(jobRepository.save(job), JobDTO.class);

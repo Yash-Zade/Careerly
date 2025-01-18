@@ -12,6 +12,7 @@ import com.teamarc.careerlybackend.repository.OnboardNewMentorRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class ApplicantService {
+
+    @Value("${base.url}")
+    private String baseUrl;
+
 
     private final ApplicantRepository applicantRepository;
     private final JobApplicationRepository jobApplicationRepository;
@@ -63,7 +68,7 @@ public class ApplicantService {
                 .subject("New Job Application")
                 .body("A new job application has been submitted for job: " + savedJobApplication.getJob().getTitle())
                 .buttonText("View Application")
-                .buttonUrl("http://localhost:8080/job-applications/" + savedJobApplication.getApplicationId())
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
 
         amqpTemplate.convertAndSend("emailQueue", emailRequest);
@@ -84,7 +89,7 @@ public class ApplicantService {
                 .subject("Job Application Withdrawn")
                 .body("Your job application has been withdrawn for job: " + jobApplication.getJob().getTitle())
                 .buttonText("View Application")
-                .buttonUrl("http://localhost:8080/job-applications/" + jobApplication.getApplicationId())
+                .buttonUrl(baseUrl+"/job-applications/" + jobApplication.getApplicationId())
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);
@@ -217,7 +222,7 @@ public class ApplicantService {
                 .subject("Employer Onboarding Request")
                 .body("Your request for employer onboarding has been submitted")
                 .buttonText("View")
-                .buttonUrl("https://your-site.com")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         onboardNewEmployerRepository.save(modelMapper.map(onboardNewEmployerDTO, OnboardNewEmployer.class));
@@ -229,7 +234,7 @@ public class ApplicantService {
                 .subject("Mentor Onboarding Request")
                 .body("Your request for mentor onboarding has been submitted")
                 .buttonText("View")
-                .buttonUrl("https://your-site.com")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         onboardNewMentorRepository.save(modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class));

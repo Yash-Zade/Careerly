@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,10 @@ import static com.teamarc.careerlybackend.entity.enums.Role.APPLICANT;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    @Value("${base.url}")
+    private String baseUrl;
+
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -49,7 +54,7 @@ public class AuthService {
                 .subject("Login Notification")
                 .body("You have successfully logged in to Careerly")
                 .buttonText("View Profile")
-                .buttonUrl("http://localhost:3000/profile")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return new String[]{accessToken, refreshToken};
@@ -73,7 +78,7 @@ public class AuthService {
                 .subject("Welcome!")
                 .body("Welcome to Careerly!")
                 .buttonText("Get Started")
-                .buttonUrl("http://localhost:3000/welcome")
+                .buttonUrl(baseUrl)
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         return modelMapper.map(savedUser, UserDTO.class);

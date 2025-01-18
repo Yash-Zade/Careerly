@@ -10,6 +10,7 @@ import com.teamarc.careerlybackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
+    @Value("${base.url}")
+    private String baseUrl;
 
     private final EmployerService employerService;
     private final MentorService mentorService;
@@ -46,7 +50,7 @@ public class AdminService {
                 .subject("Welcome to Careerly")
                 .body("Welcome to Careerly, you are now a registered employer")
                 .buttonText("View")
-                .buttonUrl("https://your-site.com")
+                .buttonUrl(baseUrl+"/employers/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         onboardNewEmployerRepository.delete(modelMapper.map(onBoardNewEmployerDTO, OnboardNewEmployer.class));
@@ -74,7 +78,7 @@ public class AdminService {
                 .subject("Welcome to Careerly")
                 .body("Welcome to Careerly, you are now a registered mentor")
                 .buttonText("View")
-                .buttonUrl("https://your-site.com")
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
         rabbitMQService.sendEmail(emailRequest);
         onboardNewMentorRepository.delete(modelMapper.map(onboardNewMentorDTO, OnboardNewMentor.class));

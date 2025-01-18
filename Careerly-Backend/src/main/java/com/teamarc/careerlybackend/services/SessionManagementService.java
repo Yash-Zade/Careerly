@@ -10,6 +10,7 @@ import com.teamarc.careerlybackend.exceptions.ResourceNotFoundException;
 import com.teamarc.careerlybackend.repository.SessionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,10 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class SessionManagementService {
+
+    @Value("${base.url}")
+    private String baseUrl;
+
 
     private final SessionRepository sessionRepository;
     private final ModelMapper modelMapper;
@@ -93,7 +98,7 @@ public class SessionManagementService {
                 .subject("Session Cancelled")
                 .body("Your session has been cancelled by the mentor")
                 .buttonText("View Profile")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
 
         EmailRequest emailRequest1 = EmailRequest.builder()
@@ -101,7 +106,7 @@ public class SessionManagementService {
                 .subject("Session Cancelled")
                 .body("Your session has been cancelled by the applicant")
                 .buttonText("View Profile")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);
@@ -123,7 +128,7 @@ public class SessionManagementService {
                 .subject("Session Requested")
                 .body("You have a new session request from " + applicant.getUser().getName())
                 .buttonText("View Profile")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/mentors/profile")
                 .build();
 
         EmailRequest emailRequest1 = EmailRequest.builder()
@@ -131,7 +136,7 @@ public class SessionManagementService {
                 .subject("Session Requested")
                 .body("Your session request has been sent to " + session.getMentor().getUser().getName())
                 .buttonText("View Profile")
-                .buttonUrl("http://localhost:8080")
+                .buttonUrl(baseUrl+"/applicants/profile")
                 .build();
 
         rabbitMQService.sendEmail(emailRequest);
@@ -157,7 +162,7 @@ public class SessionManagementService {
                     .subject("Session Accepted")
                     .body("Your session has been accepted by the mentor, OTP: " + session.getOtp())
                     .buttonText("View Profile")
-                    .buttonUrl("http://localhost:8080")
+                    .buttonUrl(baseUrl+"/applicant/profile")
                     .build();
             rabbitMQService.sendEmail(emailRequest);
             return modelMapper.map(savedSession, SessionDTO.class);
